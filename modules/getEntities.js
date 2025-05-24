@@ -1,3 +1,3 @@
-export async function getClientsAndEquipments() {
-	
-}
+export async function getTariffs() {}
+
+export async function getClientsAndEquipments() {}
