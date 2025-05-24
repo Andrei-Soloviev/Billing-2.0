@@ -36,7 +36,7 @@ export async function getClientsAndEquipments() {
 
 	while (result != [] && result != 'Ошибка') {
 		let request = await fetch(
-			`https://${_account}.okdesk.ru/api/v1/nomenclature/price_lists/${_priceListId}/services?api_token=${_token}&page[size]=1&page[from_id]=${startId}&page[direction]=forward`
+			`https://${_account}.okdesk.ru/api/v1/equipments/list?api_token=${_token}&page[size]=1&page[from_id]=${startId}&page[direction]=forward`
 		)
 		if (request.ok) {
 			let result = await request.json()
@@ -44,11 +44,10 @@ export async function getClientsAndEquipments() {
 				break
 			}
 			let id = result[0].id
-			let name = result[0].name
-			let price = result[0].price
-			let vendorCode = result[0].vendor_code
+			let companyId = result[0].company
+
 			startId = id + 1
-			billingEquipmentsArr.push({ id, name, price, vendorCode })
+			/* billingEquipmentsArr.push({ id, companyId, price, vendorCode }) */
 		} else {
 			result = 'Ошибка'
 			return `${request.statusText} ${request.text}`
