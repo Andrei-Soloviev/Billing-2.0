@@ -1,9 +1,12 @@
+import db from '../DB/DB.js'
 import { _account, _priceListId, _token } from '../settings/setSettings.js'
 
+const DB = new db()
 export async function getTariffs() {
-	let allTariffsArr = []
 	let startId = 0
 	let result
+
+	DB.truncateTariffs()
 
 	while (result != '' && result != 'Ошибка') {
 		let request = await fetch(
@@ -19,14 +22,13 @@ export async function getTariffs() {
 			let price = result[0].price
 			let vendorCode = result[0].vendor_code
 			startId = id + 1
-			allTariffsArr.push({ id, name, price, vendorCode })
+			await DB.addTariff(id, name, price, vendorCode)
 		} else {
 			result = 'Ошибка'
 			return `${request.statusText} ${request.text}`
 		}
 		await new Promise(resolve => setTimeout(resolve, 200))
 	}
-	return allTariffsArr
 }
 
 export async function getClientsAndEquipments() {

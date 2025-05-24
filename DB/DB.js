@@ -37,9 +37,9 @@ export default class DB {
 	)`
 		try {
 			await this.pool.query(query)
-			console.log(`Создание таблицы отработано`)
+			console.log(`Создание таблицы Тарифы отработано`)
 		} catch (err) {
-			console.error(`Ошибка: ${err}`)
+			console.error(`Ошибка при создании таблицы Тарифы: ${err}`)
 		}
 	}
 
@@ -60,10 +60,20 @@ export default class DB {
 			VALUES ($1, $2, $3, $4);`
 		try {
 			await this.pool.query(query, [id, name, price, vendorCode])
-			console.log('Успешно вставлено в Тарифы')
-			await this.getData()
+			console.log(`Успешно вставлен Тариф "${name}"`)
+			await this.getTariffs()
 		} catch (err) {
 			console.error(`Ошибка вставки в Тарифы: ${err}`)
+		}
+	}
+
+	async truncateTariffs() {
+		let query = `TRUNCATE TABLE tariffs`
+		try {
+			await this.pool.query(query)
+			console.log('Таблица Тарифы очищена')
+		} catch (err) {
+			console.error(`Ошибка очистки таблицы Тарифы: ${err}`)
 		}
 	}
 
