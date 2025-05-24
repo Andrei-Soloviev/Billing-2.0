@@ -18,9 +18,8 @@ export async function getTariffs() {
 			let name = result[0].name
 			let price = result[0].price
 			let vendorCode = result[0].vendor_code
-			let equipmentName = result[0].equipment_name_format
 			startId = id + 1
-			allTariffsArr.push({ id, name, equipmentName, price, vendorCode })
+			allTariffsArr.push({ id, name, price, vendorCode })
 		} else {
 			result = 'Ошибка'
 			return `${request.statusText} ${request.text}`
