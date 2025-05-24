@@ -1,5 +1,16 @@
 {
 	"account": "field-service",
 	"token": "9e27efda7519f3e8f6c387a31d68271c2ceb2a24",
-	"priceListId": 48557
+	"priceListId": 48557,
+
+	"equipmentParametersCodes": {
+		"billing": "billing",
+		"tariff": "tarif",
+		"ownerSim": "002",
+		"numberSim": "003",
+		"avtograf": "004"
+	},
+	"equipmentParametersValues": {
+		"billing": "Вкл."
+	}
 }

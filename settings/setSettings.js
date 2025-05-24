@@ -11,3 +11,11 @@ settings = JSON.parse(settings)
 export const _account = settings.account
 export const _token = settings.token
 export const _priceListId = settings.priceListId
+
+export const _equipmentBillingCode = settings.equipmentParametersCodes.billing
+export const _equipmentBillingValue = settings.equipmentParametersValues.billing
+export const _equipmentTariffCode = settings.equipmentParametersCodes.tariff
+export const _equipmentOwnerSimCode = settings.equipmentParametersCodes.ownerSim
+export const _equipmentNumberSimCode =
+	settings.equipmentParametersCodes.numberSim
+export const _equipmentAvtografCode = settings.equipmentParametersCodes.avtograf
