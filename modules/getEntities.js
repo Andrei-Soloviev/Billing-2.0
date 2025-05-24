@@ -8,6 +8,7 @@ import {
 	_equipmentOwnerSimCode,
 	_equipmentTariffCode,
 	_priceListId,
+	_priceListPosNotFound,
 	_token,
 } from '../settings/setSettings.js'
 
@@ -42,7 +43,6 @@ export async function getTariffs() {
 }
 
 export async function getClientsAndEquipments() {
-	let billingEquipmentsArr = []
 	let startId = 0
 	let result
 
@@ -66,9 +66,9 @@ export async function getClientsAndEquipments() {
 				}
 				let type = elem.equipment_kind.name
 				let manufacturer = elem.equipment_manufacturer
-					? elem.equipment_manufacturer.name
+					? ' ' + elem.equipment_manufacturer.name
 					: ''
-				let model = elem.equipment_model ? elem.equipment_model.name : ''
+				let model = elem.equipment_model ? ' ' + elem.equipment_model.name : ''
 				let number = elem.inventory_number
 
 				let tariff
@@ -86,11 +86,15 @@ export async function getClientsAndEquipments() {
 						avtograf = parameter.value
 					}
 				}
+
+				let tariffVendorCode =
+					tariff.split(' ')[0].replace(':', '') || _priceListPosNotFound
+				let tariffId = await DB.findTariffByVendorCode(tariffVendorCode)
 				console.log({
 					id: id,
 					companyId: companyId,
-					tariff: tariff,
-					name: type + ' ' + manufacturer + ' ' + model,
+					tariffId: tariffId,
+					name: type + manufacturer + model,
 					number: number,
 					ownerSim: ownerSim,
 					numberSim: numberSim,

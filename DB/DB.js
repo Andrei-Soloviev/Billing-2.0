@@ -77,6 +77,18 @@ export default class DB {
 		}
 	}
 
+	async findTariffByVendorCode(vendorCode) {
+		let query = `SELECT tariff_id, tariff_name, tariff_price, tariff_vendor_code
+			FROM tariffs
+			WHERE tariff_vendor_code=$1;`
+		try {
+			let queryRes = await this.pool.query(query, [vendorCode])
+			return queryRes.rows[0].tariff_id
+		} catch (err) {
+			console.log(`Ошибка нахождения Тарифа по артикулу: ${err}`)
+		}
+	}
+
 	async getData() {
 		const query = `SELECT id, completed_at
 	FROM issues;`
