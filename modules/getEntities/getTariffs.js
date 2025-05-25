@@ -1,5 +1,5 @@
 import tariffsTable from '../../DB/tariffsTable.js'
-import getTariffsAPI from './services/getTariffsAPI.js'
+import getTariffsListAPI from './services/getTariffsListAPI.js'
 
 const DB = new tariffsTable()
 
@@ -10,7 +10,7 @@ export default async function getTariffs() {
 	let tariffs
 
 	while (tariffs != '') {
-		tariffs = await getTariffsAPI(startId)
+		tariffs = await getTariffsListAPI(startId)
 		if (tariffs == '') {
 			break
 		}

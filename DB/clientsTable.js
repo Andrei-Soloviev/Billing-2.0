@@ -56,4 +56,13 @@ export default class clientsTable {
 			console.log(`Ошибка нахождения Клиента по id: ${err}`)
 		}
 	}
+	async truncateClients() {
+		let query = `TRUNCATE TABLE clients CASCADE`
+		try {
+			await this.pool.query(query)
+			console.log('Таблица Клиенты очищена')
+		} catch (err) {
+			console.error(`Ошибка очистки таблицы Клиенты: ${err}`)
+		}
+	}
 }

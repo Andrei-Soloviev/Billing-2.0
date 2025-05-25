@@ -1,3 +1,0 @@
-Имя БД: billing_history
-Имя пользователя: editor_billing_history
-Пароль пользователя: edb143135hds

@@ -66,7 +66,6 @@ export default class objectsTable {
 				is_active,
 			])
 			console.log(`В БД успешно вставлен Объект "${name}"`)
-			await this.getTariffs()
 		} catch (err) {
 			console.error(`Ошибка вставки в Объекты: ${err}`)
 		}

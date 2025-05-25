@@ -56,16 +56,6 @@ export default class tariffsTable {
 		}
 	}
 
-	async truncateTariffs() {
-		let query = `TRUNCATE TABLE tariffs`
-		try {
-			await this.pool.query(query)
-			console.log('Таблица Тарифы очищена')
-		} catch (err) {
-			console.error(`Ошибка очистки таблицы Тарифы: ${err}`)
-		}
-	}
-
 	async findTariffByVendorCode(vendorCode) {
 		let query = `SELECT tariff_id, tariff_name, tariff_price, tariff_vendor_code
 			FROM tariffs
@@ -75,6 +65,15 @@ export default class tariffsTable {
 			return queryRes.rows[0] || null
 		} catch (err) {
 			console.log(`Ошибка нахождения Тарифа по артикулу: ${err}`)
+		}
+	}
+	async truncateTariffs() {
+		let query = `TRUNCATE TABLE tariffs`
+		try {
+			await this.pool.query(query)
+			console.log('Таблица Тарифы очищена')
+		} catch (err) {
+			console.error(`Ошибка очистки таблицы Тарифы: ${err}`)
 		}
 	}
 }
