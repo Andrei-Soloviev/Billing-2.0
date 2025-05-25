@@ -82,4 +82,25 @@ export default class objectsTable {
 			console.log(`Ошибка нахождения Объекта по id: ${err}`)
 		}
 	}
+
+	async activateObject(id) {
+		let query = `UPDATE Objects SET is_active = true
+			WHERE object_id=$1;`
+		try {
+			await this.pool.query(query, [id])
+			console.log(`Объект с id "${id}" активирован в БД`)
+		} catch (err) {
+			console.log(`Ошибка активации Объекта по id: ${err}`)
+		}
+	}
+
+	async deactivateObjects() {
+		let query = `UPDATE Objects SET is_active = false`
+		try {
+			await this.pool.query(query)
+			console.log('Объекты деактивированы в БД')
+		} catch (err) {
+			console.error(`Ошибка деактивации Объектов в БД: ${err}`)
+		}
+	}
 }

@@ -16,7 +16,8 @@ export default async function getObjectsAndClients() {
 	let startId = 0
 	let result
 
-	await _clientsTableDB.truncateClients()
+	await _clientsTableDB.deactivateClients()
+	await _objectsTableDB.deactivateObjects()
 
 	while (true) {
 		let result = await getBillableEquipmentsListAPI(startId)
@@ -32,10 +33,12 @@ export default async function getObjectsAndClients() {
 				if (elem.parent_id != null) {
 					continue
 				}
+				// Получение данных клиента
 				companyId = elem.company.id
 				let companyData = await getCompanyAPI(companyId)
 				let { companyName, companyAgreement } = parseClientData(companyData)
 
+				// 	Вставка клиента в БД
 				let isClientInDb = await checkIsClientInDB(companyId)
 				if (!isClientInDb) {
 					await _clientsTableDB.addClient(
@@ -44,7 +47,10 @@ export default async function getObjectsAndClients() {
 						companyAgreement,
 						true
 					)
+				} else {
+					await _clientsTableDB.activateClient(companyId)
 				}
+				// Если у оборудки нет клиента
 			} catch (e) {
 				startId = objectId + 1
 				continue
@@ -66,6 +72,8 @@ export default async function getObjectsAndClients() {
 					avtograf,
 					true
 				)
+			} else {
+				await _objectsTableDB.activateObject(objectId)
 			}
 			/* console.log({
 				id: id,

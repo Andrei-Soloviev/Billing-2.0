@@ -56,6 +56,28 @@ export default class clientsTable {
 			console.log(`Ошибка нахождения Клиента по id: ${err}`)
 		}
 	}
+
+	async activateClient(id) {
+		let query = `UPDATE Clients SET is_active = true
+			WHERE company_id=$1;`
+		try {
+			await this.pool.query(query, [id])
+			console.log(`Клиент с id "${id}" активирован в БД`)
+		} catch (err) {
+			console.log(`Ошибка активации Клиента по id: ${err}`)
+		}
+	}
+
+	async deactivateClients() {
+		let query = `UPDATE Clients SET is_active = false`
+		try {
+			await this.pool.query(query)
+			console.log('Клиенты деактивированы в БД')
+		} catch (err) {
+			console.error(`Ошибка деактивации Клиентов в БД: ${err}`)
+		}
+	}
+
 	async truncateClients() {
 		let query = `TRUNCATE TABLE clients CASCADE`
 		try {
