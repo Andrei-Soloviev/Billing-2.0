@@ -1,6 +1,7 @@
 import db from '../DB/DB.js'
 import {
 	_account,
+	_companyAgreementCode,
 	_equipmentAvtografCode,
 	_equipmentBillingCode,
 	_equipmentBillingValue,
@@ -13,34 +14,7 @@ import {
 } from '../settings/setSettings.js'
 
 const DB = new db()
-export async function getTariffs() {
-	let startId = 0
-	let result
 
-	DB.truncateTariffs()
-
-	while (result != '' && result != 'Ошибка') {
-		let request = await fetch(
-			`https://${_account}.okdesk.ru/api/v1/nomenclature/price_lists/${_priceListId}/services?api_token=${_token}&page[size]=1&page[from_id]=${startId}&page[direction]=forward`
-		)
-		if (request.ok) {
-			let result = await request.json()
-			if (result == '') {
-				break
-			}
-			let id = result[0].id
-			let name = result[0].name
-			let price = result[0].price
-			let vendorCode = result[0].vendor_code
-			startId = id + 1
-			await DB.addTariff(id, name, price, vendorCode)
-		} else {
-			result = 'Ошибка'
-			return `${request.statusText} ${request.text}`
-		}
-		await new Promise(resolve => setTimeout(resolve, 200))
-	}
-}
 
 export async function getClientsAndEquipments() {
 	let startId = 0
@@ -60,6 +34,20 @@ export async function getClientsAndEquipments() {
 				let companyId
 				try {
 					companyId = elem.company.id
+					let companyData
+					let findCompanyRequest = await fetch(
+						`https://${_account}.okdesk.ru/api/v1/companies?api_token=${_token}&id=${companyId}`
+					)
+						.then(async result => (companyData = await result.json()).body)
+						.catch(err => console.log(err))
+					let companyName = companyData.name
+					let companyAgreement = companyData.parameters.filter(
+						elem => elem.code == _companyAgreementCode
+					)[0].value
+					let isClientInDb = (await DB.findClientById(companyId)) ? true : false
+					if (!isClientInDb) {
+						await DB.addClient(companyId, companyName, companyAgreement, true)
+					}
 				} catch (e) {
 					startId = id + 1
 					continue
@@ -89,8 +77,23 @@ export async function getClientsAndEquipments() {
 
 				let tariffVendorCode =
 					tariff.split(' ')[0].replace(':', '') || _priceListPosNotFound
-				let tariffId = await DB.findTariffByVendorCode(tariffVendorCode)
-				console.log({
+				let tariffId = (await DB.findTariffByVendorCode(tariffVendorCode))
+					.tariff_id
+				let isObjInDB = (await DB.findObjectById(id)) ? true : false
+				if (!isObjInDB) {
+					/* await DB.addObject(
+						id,
+						companyId,
+						tariffId,
+						type + manufacturer + model,
+						number,
+						ownerSim,
+						numberSim,
+						avtograf,
+						true
+					) */
+				}
+				/* console.log({
 					id: id,
 					companyId: companyId,
 					tariffId: tariffId,
@@ -99,7 +102,7 @@ export async function getClientsAndEquipments() {
 					ownerSim: ownerSim,
 					numberSim: numberSim,
 					avtograf: avtograf,
-				})
+				}) */
 				startId = id + 1
 			}
 		} else {

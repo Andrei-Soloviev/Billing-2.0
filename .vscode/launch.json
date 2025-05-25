@@ -5,7 +5,7 @@
 			"request": "launch",
 			"name": "Launch Program",
 			"program": "app.js",
-			"outputCapture": "std",
+			"outputCapture": "std"
 		}
 	]
 }

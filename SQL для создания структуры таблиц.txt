@@ -23,7 +23,7 @@ CREATE TABLE Objects (
     number_vehicle VARCHAR(50),
     owner_sim VARCHAR(255),
     number_sim VARCHAR(50),
-    aftograf VARCHAR(255),
+    avtograf VARCHAR(255),
     is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (company_id) REFERENCES Clients(company_id),
     FOREIGN KEY (tariff_id) REFERENCES Tariffs(tariff_id)

@@ -21,3 +21,5 @@ export const _equipmentOwnerSimCode = settings.equipmentParametersCodes.ownerSim
 export const _equipmentNumberSimCode =
 	settings.equipmentParametersCodes.numberSim
 export const _equipmentAvtografCode = settings.equipmentParametersCodes.avtograf
+
+export const _companyAgreementCode = settings.companyParametersCodes.agreement
