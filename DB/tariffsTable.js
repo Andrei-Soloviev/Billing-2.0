@@ -18,16 +18,6 @@ export default class tariffsTable {
 		})
 	}
 
-	async checkDB() {
-		const query = `SELECT NOW();`
-		try {
-			await this.pool.query(query)
-			console.log(`БД подключена`)
-		} catch (err) {
-			console.error(`Ошибка подключения к БД: ${err}`)
-		}
-	}
-
 	async createTableTariffs() {
 		const query = `CREATE TABLE IF NOT EXISTS tariffs (
 		tariff_id SERIAL PRIMARY KEY,
