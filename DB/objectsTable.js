@@ -18,8 +18,8 @@ export default class objectsTable {
 		})
 	}
 
-	async createTableObjects() {
-		const query = `CREATE TABLE Objects (
+	async createTableObjectsIfNotExist() {
+		const query = `CREATE TABLE IF NOT EXISTS Objects (
     object_id SERIAL PRIMARY KEY,
     company_id INT NOT NULL,
     tariff_id INT NOT NULL,
@@ -78,6 +78,18 @@ export default class objectsTable {
 		try {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
+		} catch (err) {
+			console.log(`Ошибка нахождения Объекта по id: ${err}`)
+		}
+	}
+
+	async findObjectsByCompanyId(id) {
+		let query = `SELECT object_id, company_id, tariff_id, name, number_vehicle, owner_sim, number_sim, avtograf, is_active
+			FROM objects
+			WHERE company_id=$1;`
+		try {
+			let queryRes = await this.pool.query(query, [id])
+			return queryRes.rows || null
 		} catch (err) {
 			console.log(`Ошибка нахождения Объекта по id: ${err}`)
 		}

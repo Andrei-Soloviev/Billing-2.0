@@ -1,4 +1,4 @@
-import { _account, _token } from '../../../settings/setSettings.js'
+import { _account, _token } from '../settings/setSettings.js'
 export default async function getCompanyAPI(companyId) {
 	let result
 

@@ -1,10 +1,10 @@
 import clientsTable from '../../DB/clientsTable.js'
 import objectsTable from '../../DB/objectsTable.js'
 import tariffsTable from '../../DB/tariffsTable.js'
-import checkIsClientInDB from './services/checkIsClientInDB.js'
-import checkIsObjectInDB from './services/checkIsObjectInDB.js'
-import getBillableEquipmentsListAPI from './services/getBillableEquipmentsListAPI.js'
-import getCompanyAPI from './services/getCompanyAPI.js'
+import checkIsClientInDB from '../../API/checkIsClientInDB.js'
+import checkIsObjectInDB from '../../API/checkIsObjectInDB.js'
+import getBillableEquipmentsListAPI from '../../API/getBillableEquipmentsListAPI.js'
+import getCompanyAPI from '../../API/getCompanyAPI.js'
 import parseClientData from './utils/parseClientData.js'
 import parseEquipmentData from './utils/parseEquipmentData.js'
 
@@ -75,16 +75,6 @@ export default async function getObjectsAndClients() {
 			} else {
 				await _objectsTableDB.activateObject(objectId)
 			}
-			/* console.log({
-				id: id,
-				companyId: companyId,
-				tariffId: tariffId,
-				name: type + manufacturer + model + number,
-				number: number,
-				ownerSim: ownerSim,
-				numberSim: numberSim,
-				avtograf: avtograf,
-			}) */
 			startId = objectId + 1
 
 			await new Promise(resolve => setTimeout(resolve, 200))

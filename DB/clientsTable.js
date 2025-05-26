@@ -18,8 +18,8 @@ export default class clientsTable {
 		})
 	}
 
-	async createTableClients() {
-		const query = `CREATE TABLE Clients (
+	async createTableClientsIfNotExist() {
+		const query = `CREATE TABLE IF NOT EXISTS Clients (
 			company_id SERIAL PRIMARY KEY,
 			company_name VARCHAR(255) NOT NULL,
 			agreement TEXT,
@@ -30,6 +30,18 @@ export default class clientsTable {
 			console.log(`Создание таблицы Клиенты отработано`)
 		} catch (err) {
 			console.error(`Ошибка при создании таблицы Клиенты: ${err}`)
+		}
+	}
+
+	async getActiveClients() {
+		const query = `SELECT *
+			FROM clients
+			WHERE is_active=true;`
+		try {
+			let queryRes = await this.pool.query(query)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения активных Клиентов: ${err}`)
 		}
 	}
 

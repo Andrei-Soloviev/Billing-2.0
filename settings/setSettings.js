@@ -23,3 +23,4 @@ export const _equipmentNumberSimCode =
 export const _equipmentAvtografCode = settings.equipmentParametersCodes.avtograf
 
 export const _companyAgreementCode = settings.companyParametersCodes.agreement
+export const _companyServicerCode = settings.companyParametersCodes.servicer

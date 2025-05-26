@@ -18,7 +18,7 @@ export default class tariffsTable {
 		})
 	}
 
-	async createTableTariffs() {
+	async createTableTariffsIfNotExist() {
 		const query = `CREATE TABLE IF NOT EXISTS tariffs (
 		tariff_id SERIAL PRIMARY KEY,
 		tariff_name VARCHAR(255) NOT NULL,
@@ -53,6 +53,18 @@ export default class tariffsTable {
 			console.log(`В БД успешно вставлен Тариф "${name}"`)
 		} catch (err) {
 			console.error(`Ошибка вставки в Тарифы: ${err}`)
+		}
+	}
+
+	async findTariffByID(id) {
+		let query = `SELECT tariff_id, tariff_name, tariff_price, tariff_vendor_code
+			FROM tariffs
+			WHERE tariff_id=$1;`
+		try {
+			let queryRes = await this.pool.query(query, [id])
+			return queryRes.rows[0] || null
+		} catch (err) {
+			console.log(`Ошибка нахождения Тарифа по id: ${err}`)
 		}
 	}
 

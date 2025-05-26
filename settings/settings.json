@@ -19,6 +19,7 @@
 	},
 
 	"companyParametersCodes": {
-		"agreement": "019"
+		"agreement": "019",
+		"servicer": "018"
 	}
 }

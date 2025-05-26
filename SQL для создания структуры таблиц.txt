@@ -32,11 +32,11 @@ CREATE TABLE Objects (
 -- Создание таблицы Versions (Версии)
 CREATE TABLE Versions (
     version_id SERIAL PRIMARY KEY,
-    service1_company_id INT NOT NULL,
+    servicer_company_id INT NOT NULL,
     issue_id INT,
     calculation_period VARCHAR(50),
     is_cancelled BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (service1_company_id) REFERENCES Clients(company_id)
+    FOREIGN KEY (servicer_company_id) REFERENCES Servicers(company_id)
 );
 
 -- Создание таблицы Billing (Биллинг)
@@ -50,11 +50,10 @@ CREATE TABLE Billing (
     FOREIGN KEY (object_id) REFERENCES Objects(object_id)
 );
 
--- Создание таблицы Services (Сервисы)
-CREATE TABLE Services (
+-- Создание таблицы Servicers (Сервисы)
+CREATE TABLE Servicers (
     company_id INT PRIMARY KEY,
     company_name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (company_id) REFERENCES Clients(company_id)
 );
 
 -- Создание индексов для улучшения производительности

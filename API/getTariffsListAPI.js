@@ -1,8 +1,4 @@
-import {
-	_account,
-	_priceListId,
-	_token,
-} from '../../../settings/setSettings.js'
+import { _account, _priceListId, _token } from '../settings/setSettings.js'
 export default async function getTariffsListAPI(startId) {
 	let result
 	let request = await fetch(

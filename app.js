@@ -6,8 +6,6 @@ app.listen(3000, () => console.log('work on Port: 3000')) */
 
 import 'dotenv/config'
 
-import getObjectsAndClients from './modules/getEntities/getObjectsAndClients.js'
-import getTariffs from './modules/getEntities/getTariffs.js'
-getTariffs
+import createIssues from './modules/createIssues/createIssues.js'
 
-await getObjectsAndClients()
+console.log(await createIssues(423, 14, '2025-03-31'))
