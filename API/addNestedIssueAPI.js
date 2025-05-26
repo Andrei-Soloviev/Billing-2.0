@@ -26,11 +26,11 @@ export default async function addNestedIssueAPI(
 
 	if (!request.ok) {
 		throw new Error(
-			`Ошибка запроса к АПИ для получения Клиента: ${request.status} ${
+			`Ошибка запроса к АПИ для создания Заявки: ${request.status} ${
 				request.statusText
 			}: ${JSON.stringify(result.errors)}`
 		)
 	}
-	console.log(`Создана заявка для ${clientName}: ${result.id}`)
+	console.log(`Создана Заявка для ${clientName}: ${result.id}`)
 	return result.id
 }
