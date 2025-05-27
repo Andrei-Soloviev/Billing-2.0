@@ -3,7 +3,7 @@ import {
 	_equipmentBillingCode,
 	_equipmentBillingValue,
 	_token,
-} from '../../../settings/setSettings.js'
+} from '../settings/setSettings.js'
 export default async function getBillableEquipmentsListAPI(startId) {
 	let result
 	let request = await fetch(

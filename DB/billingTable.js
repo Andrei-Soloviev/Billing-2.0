@@ -56,7 +56,7 @@ export default class billingTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Биллинга по id: ${err}`)
+			console.error(`Ошибка нахождения Биллинга по id: ${err}`)
 		}
 	}
 
@@ -68,7 +68,7 @@ export default class billingTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Биллинга по version_id: ${err}`)
+			console.error(`Ошибка нахождения Биллинга по version_id: ${err}`)
 		}
 	}
 

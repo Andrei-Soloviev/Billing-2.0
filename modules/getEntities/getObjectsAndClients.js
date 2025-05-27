@@ -1,10 +1,10 @@
+import getBillableEquipmentsListAPI from '../../API/getBillableEquipmentsListAPI.js'
+import getCompanyAPI from '../../API/getCompanyAPI.js'
 import clientsTable from '../../DB/clientsTable.js'
 import objectsTable from '../../DB/objectsTable.js'
 import tariffsTable from '../../DB/tariffsTable.js'
-import checkIsClientInDB from '../../API/checkIsClientInDB.js'
-import checkIsObjectInDB from '../../API/checkIsObjectInDB.js'
-import getBillableEquipmentsListAPI from '../../API/getBillableEquipmentsListAPI.js'
-import getCompanyAPI from '../../API/getCompanyAPI.js'
+import checkIsClientInDB from './utils/checkIsClientInDB.js'
+import checkIsObjectInDB from './utils/checkIsObjectInDB.js'
 import parseClientData from './utils/parseClientData.js'
 import parseEquipmentData from './utils/parseEquipmentData.js'
 
@@ -48,7 +48,12 @@ export default async function getObjectsAndClients() {
 						true
 					)
 				} else {
-					await _clientsTableDB.activateClient(companyId)
+					await _clientsTableDB.activateClient(
+						companyId,
+						companyName,
+						companyAgreement,
+						true
+					)
 				}
 				// Если у оборудки нет клиента
 			} catch (e) {
@@ -59,6 +64,7 @@ export default async function getObjectsAndClients() {
 			let { name, tariffId, number, ownerSim, numberSim, avtograf } =
 				await parseEquipmentData(elem)
 
+			// Вставка объекта в БД
 			let isObjInDB = await checkIsObjectInDB(objectId)
 			if (!isObjInDB) {
 				await _objectsTableDB.addObject(
@@ -73,7 +79,17 @@ export default async function getObjectsAndClients() {
 					true
 				)
 			} else {
-				await _objectsTableDB.activateObject(objectId)
+				await _objectsTableDB.changeObject(
+					objectId,
+					companyId,
+					tariffId,
+					name,
+					number,
+					ownerSim,
+					numberSim,
+					avtograf,
+					true
+				)
 			}
 			startId = objectId + 1
 

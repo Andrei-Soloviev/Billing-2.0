@@ -60,7 +60,7 @@ export default class versionsTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Версии по id: ${err}`)
+			console.error(`Ошибка нахождения Версии по id: ${err}`)
 		}
 	}
 
@@ -72,7 +72,7 @@ export default class versionsTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[queryRes.rows.length - 1] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Версии по id: ${err}`)
+			console.error(`Ошибка нахождения Версии по id: ${err}`)
 		}
 	}
 
@@ -83,7 +83,7 @@ export default class versionsTable {
 			await this.pool.query(query, [id])
 			console.log(`Версия с id "${id}" отменена в БД`)
 		} catch (err) {
-			console.log(`Ошибка отмены Версии по id: ${err}`)
+			console.error(`Ошибка отмены Версии по id: ${err}`)
 		}
 	}
 	async truncateVersions() {

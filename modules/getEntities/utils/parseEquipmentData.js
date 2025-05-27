@@ -4,7 +4,6 @@ import {
 	_equipmentNumberSimCode,
 	_equipmentOwnerSimCode,
 	_equipmentTariffCode,
-	_priceListPosNotFound,
 } from '../../../settings/setSettings.js'
 
 const _tariffsTableDB = new tariffsTable()
@@ -35,17 +34,17 @@ export default async function parseEquipmentData(data) {
 		}
 	}
 
-	let tariffVendorCode =
-		tariff.split(' ')[0].replace(':', '') || _priceListPosNotFound
+	let tariffVendorCode = tariff.split(' ')[0].replace(':', '') || null
+	let tariffByVendorCode = await _tariffsTableDB.findTariffByVendorCode(
+		tariffVendorCode
+	)
 
 	result.name = type + manufacturer + model + ' ' + number
 	result.number = number
 	result.ownerSim = ownerSim
 	result.numberSim = numberSim
 	result.avtograf = avtograf
-	result.tariffId = (
-		await _tariffsTableDB.findTariffByVendorCode(tariffVendorCode)
-	).tariff_id
+	result.tariffId = tariffByVendorCode ? tariffByVendorCode.tariff_id : null
 
 	return result
 }

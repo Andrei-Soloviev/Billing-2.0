@@ -50,7 +50,7 @@ export default class servicersTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Обс.организации по id: ${err}`)
+			console.error(`Ошибка нахождения Обс.организации по id: ${err}`)
 		}
 	}
 

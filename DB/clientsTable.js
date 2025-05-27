@@ -65,18 +65,23 @@ export default class clientsTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Клиента по id: ${err}`)
+			console.error(`Ошибка нахождения Клиента по id: ${err}`)
 		}
 	}
 
-	async activateClient(id) {
-		let query = `UPDATE Clients SET is_active = true
+	async activateClient(id, companyName, agreement, isActive) {
+		let query = `
+			UPDATE Clients 
+			SET 
+				company_name=$2,
+				agreement=$3,
+				is_active = $4
 			WHERE company_id=$1;`
 		try {
-			await this.pool.query(query, [id])
-			console.log(`Клиент с id "${id}" активирован в БД`)
+			await this.pool.query(query, [id, companyName, agreement, isActive])
+			console.log(`Клиент с id "${id}" изменен в БД`)
 		} catch (err) {
-			console.log(`Ошибка активации Клиента по id: ${err}`)
+			console.error(`Ошибка изменения Клиента по id: ${err}`)
 		}
 	}
 

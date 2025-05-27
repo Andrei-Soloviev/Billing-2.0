@@ -1,5 +1,5 @@
+import getTariffsListAPI from '../../API/getTariffsListAPI.js'
 import tariffsTable from '../../DB/tariffsTable.js'
-import getTariffsListAPI from './services/getTariffsListAPI.js'
 
 const DB = new tariffsTable()
 

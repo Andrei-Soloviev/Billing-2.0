@@ -64,7 +64,7 @@ export default class tariffsTable {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Тарифа по id: ${err}`)
+			console.error(`Ошибка нахождения Тарифа по id: ${err}`)
 		}
 	}
 
@@ -76,7 +76,7 @@ export default class tariffsTable {
 			let queryRes = await this.pool.query(query, [vendorCode])
 			return queryRes.rows[0] || null
 		} catch (err) {
-			console.log(`Ошибка нахождения Тарифа по артикулу: ${err}`)
+			console.error(`Ошибка нахождения Тарифа по артикулу: ${err}`)
 		}
 	}
 	async truncateTariffs() {

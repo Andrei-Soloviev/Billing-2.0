@@ -19,6 +19,7 @@ export default async function deleteIssues(parentIssueId) {
 	)
 	for (let issueId of issuesToDel) {
 		await delIssueAPI(issueId)
+		await new Promise(resolve => setTimeout(resolve, 200))
 	}
 
 	return issuesToDel

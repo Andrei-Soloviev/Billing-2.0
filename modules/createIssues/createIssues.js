@@ -4,6 +4,7 @@ import billingTable from '../../DB/billingTable.js'
 import clientsTable from '../../DB/clientsTable.js'
 import servicersTable from '../../DB/servicersTable.js'
 import versionsTable from '../../DB/versionsTable.js'
+import createSpecification from '../createSpecification/createSpecification.js'
 import checkIsServicerInDB from './utils/checkIsServicerInDB.js'
 import getCurClientServicer from './utils/getCurClientServicer.js'
 import getCurEquipment from './utils/getCurEquipment.js'
@@ -86,8 +87,10 @@ export default async function createIssues(
 				)
 			}
 
+			// Создание спецификации
+			await createSpecification(curIssueId, curEquipments)
+
 			await new Promise(resolve => setTimeout(resolve, 200))
 		}
 	}
-	return parentIssueClientName
 }
