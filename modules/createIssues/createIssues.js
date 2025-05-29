@@ -4,6 +4,7 @@ import billingTable from '../../DB/billingTable.js'
 import clientsTable from '../../DB/clientsTable.js'
 import servicersTable from '../../DB/servicersTable.js'
 import versionsTable from '../../DB/versionsTable.js'
+import createDecoding from '../createDecoding/createDecoding.js'
 import createSpecification from '../createSpecification/createSpecification.js'
 import checkIsServicerInDB from './utils/checkIsServicerInDB.js'
 import getCurClientServicer from './utils/getCurClientServicer.js'
@@ -89,6 +90,15 @@ export default async function createIssues(
 
 			// Создание спецификации
 			await createSpecification(curIssueId, curEquipments)
+
+			// Создание расшифровки
+			await createDecoding(
+				curIssueId,
+				curClientId,
+				curEquipments,
+				curVersionId,
+				'30.04.2025'
+			)
 
 			await new Promise(resolve => setTimeout(resolve, 200))
 		}

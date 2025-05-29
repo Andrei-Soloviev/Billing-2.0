@@ -11,8 +11,8 @@ import getTariffs from './modules/getEntities/getTariffs.js'
 await getTariffs()
 await getObjectsAndClients() */
 
-/* import createIssues from './modules/createIssues/createIssues.js'
-console.log(await createIssues(423, 14, '2025-03-31')) */
+import createIssues from './modules/createIssues/createIssues.js'
+console.log(await createIssues(423, 14, '2025-03-31'))
 
-import deleteIssues from './modules/deleteIssues/deleteIssues.js'
-console.log(await deleteIssues(423))
+/* import deleteIssues from './modules/deleteIssues/deleteIssues.js'
+console.log(await deleteIssues(423)) */

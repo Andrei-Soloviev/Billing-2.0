@@ -1,0 +1,121 @@
+<style>
+	@page {
+		size: A4;
+		margin: 1.5cm;
+	}
+	body {
+		font-family: Arial, sans-serif;
+		font-size: 12px;
+		line-height: 1.4;
+		color: #000;
+		margin: 0;
+		padding: 0;
+	}
+	h1 {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 0;
+		/* margin-top: 20px; */
+	}
+	h3 {
+		font-size: 14px;
+		font-weight: bold;
+		margin: 0 0 15px 0;
+	}
+	table {
+		font-size: 12px;
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 15px;
+		page-break-inside: avoid;
+	}
+	th,
+	td {
+		border: 1px solid #000;
+		padding: 4px 6px;
+		text-align: left;
+		vertical-align: top;
+	}
+	th {
+		background-color: #f2f2f2;
+		font-weight: bold;
+		text-align: center;
+	}
+	.total {
+		font-weight: bold;
+		margin-top: 10px;
+		text-align: right;
+	}
+	.footer {
+		margin-top: 20px;
+		text-align: right;
+		font-style: italic;
+	}
+	.total-container {
+        width: 100%;
+        margin-top: 10px;
+				margin-right: 5px;
+    }
+    .total-row {
+        display: table;
+        width: auto;
+        margin-left: auto;
+    }
+    .total-label {
+        display: table-cell;
+        padding-right: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+    }
+    .total-value {
+        display: table-cell;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+    }
+
+	strong {
+		font-size: 16px;
+	}
+</style>
+
+<h1><%= data.title %></h1>
+<h3 style="text-align: center; font-weight: normal">
+	от <%= data.invoiceDate %>
+</h3>
+<h3 style="font-weight: normal; font-style: italic; margin-bottom: 10px;">ТС на обслуживании</h3>
+<table>
+	<thead>
+		<tr>
+			<th>№ п/п</th>
+			<th>Номер ТС</th>
+			<th>Транспортное средство</th>
+			<th>Собственник SIM-карты</th>
+			<th>Номер SIM</th>
+			<th>АвтоГраф</th>
+			<th>Сумма по тарифу</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for (let i=0; i<data.objects.length; i++) { %>
+		<tr>
+			<td style='text-align: right;'><%= i+1 %></td>
+			<td style='text-align: center;'><%= data.objects[i].number_vehicle %></td>
+			<td><%=data.objects[i].name %></td>
+			<td ><%=data.objects[i].owner_sim%></td>
+			<td style='text-align: center;'><%=data.objects[i].number_sim%></td>
+			<td style='text-align: center;'><%=data.objects[i].avtograf%></td>
+			<td style='text-align: right;'><%=data.objects[i].price%></td>
+		</tr>
+		<% }; %>
+	</tbody>
+</table>
+
+<div class="total-container">
+	<div class="total-row">
+			<span class="total-label">Итого:</span>
+			<span class="total-value" style='display: inline-block; margin-right: 5px;'><%=data.resultPrice %></span>
+	</div>
+</div>

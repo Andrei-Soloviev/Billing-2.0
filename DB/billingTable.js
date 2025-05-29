@@ -72,6 +72,20 @@ export default class billingTable {
 		}
 	}
 
+	async findBillingByObjectIdAndVersionId(object_id, version_id) {
+		let query = `SELECT billing_id, version_id, object_id, issue_id, price_payment_time 
+			FROM billing
+			WHERE object_id=$1 and version_id=$2;`
+		try {
+			let queryRes = await this.pool.query(query, [object_id, version_id])
+			return queryRes.rows || null
+		} catch (err) {
+			console.error(
+				`Ошибка нахождения Биллинга по object_id и version_id: ${err}`
+			)
+		}
+	}
+
 	async truncateBillings() {
 		let query = `TRUNCATE TABLE billings`
 		try {

@@ -14,6 +14,8 @@ export const _token = settings.token
 export const _priceListId = settings.priceList.id
 export const _priceListPosNotFound = settings.priceList.posNotFound
 
+export const _commentAuthorId = settings.issues.commentAuthorId
+
 export const _equipmentBillingCode = settings.equipmentParametersCodes.billing
 export const _equipmentBillingValue = settings.equipmentParametersValues.billing
 export const _equipmentTariffCode = settings.equipmentParametersCodes.tariff
