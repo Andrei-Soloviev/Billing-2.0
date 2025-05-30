@@ -7,7 +7,13 @@
 		"posNotFound": "0000000"
 	},
 
-	"issues": {
+	"issue": {
+		"parentType": "04",
+		"parentCreateStartStatus": "025",
+		"parentCreateEndStatus": "040",
+		"parentCancelStartStatus": "039",
+		"parentCancelEndStatus": "026",
+		"invoiceDateParamCode": "155",
 		"commentAuthorId": 30
 	},
 
