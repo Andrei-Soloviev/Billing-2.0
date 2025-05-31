@@ -8,13 +8,39 @@
 	},
 
 	"issue": {
-		"parentType": "04",
-		"parentCreateStartStatus": "025",
-		"parentCreateEndStatus": "040",
-		"parentCancelStartStatus": "039",
-		"parentCancelEndStatus": "026",
-		"invoiceDateParamCode": "155",
-		"commentAuthorId": 30
+		"type": {
+			"parent": "04",
+			"nested": "03"
+		},
+		"statuses": {
+			"parentCreateStart": "025",
+			"parentCreateEnd": "040",
+			"parentCancelStart": "039",
+			"parentCancelEnd": "026",
+			"nestedEnd": "027"
+		},
+		"comments": {
+			"authorId": 30,
+			"createStartText": "Запущена автоматическая подготовка счетов.",
+			"createEndText": "Счета автоматически <strong>подготовлены</strong> и находятся во вложенных заявках.",
+			"cancelStartText": "Запущена отмена.",
+			"cancelEndText": "Отмена <strong>завершена</strong>.",
+			"nestedEndText": "Счет готов к выставлению."
+		},
+		"params": {
+			"invoiceDateCode": "155",
+			"innCode": "154",
+			"kppCode": "157",
+			"observerAddressCode": "158",
+			"observerPhoneCode": "159",
+			"companyPaymentAccountCode": "160",
+			"bankPaymentAccountCode": "163",
+			"bikCode": "162",
+			"bank": "161",
+			"director": "164",
+			"period": "166",
+			"payBefore": "165"
+		}
 	},
 
 	"equipmentParametersCodes": {
@@ -30,6 +56,13 @@
 
 	"companyParametersCodes": {
 		"agreement": "019",
-		"servicer": "018"
+		"servicer": "018",
+		"inn": "011",
+		"kpp": "012",
+		"companyPaymentAccount": "013",
+		"bankPaymentAccount": "016",
+		"bik": "015",
+		"bank": "014",
+		"director": "017"
 	}
 }

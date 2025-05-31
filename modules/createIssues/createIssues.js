@@ -1,9 +1,17 @@
+import addCommentToIssueAPI from '../../API/addCommentToIssueAPI.js'
 import addNestedIssueAPI from '../../API/addNestedIssueAPI.js'
+import changeIssueParamsAPI from '../../API/changeIssueParamsAPI.js'
+import changeStatusAPI from '../../API/changeStatusAPI.js'
 import getCompanyAPI from '../../API/getCompanyAPI.js'
 import billingTable from '../../DB/billingTable.js'
 import clientsTable from '../../DB/clientsTable.js'
 import servicersTable from '../../DB/servicersTable.js'
 import versionsTable from '../../DB/versionsTable.js'
+import {
+	_commentNestedEndText,
+	_nestedEndStatus,
+	_nestedType,
+} from '../../settings/setSettings.js'
 import createDecoding from '../createDecoding/createDecoding.js'
 import createSpecification from '../createSpecification/createSpecification.js'
 import checkIsServicerInDB from './utils/checkIsServicerInDB.js'
@@ -12,18 +20,21 @@ import getCurEquipment from './utils/getCurEquipment.js'
 import getCurPrice from './utils/getCurPrice.js'
 import getCurTariffId from './utils/getCurTariffId.js'
 import getCurVersionId from './utils/getCurVersionId.js'
+import parseParametersForNestedIssue from './utils/parseParametersForNestedIssue.js'
+import parseParentIssueData from './utils/parseParentIssueData.js'
 
 const _clientsTableDB = new clientsTable()
 const _servicersTableDB = new servicersTable()
 const _versionsTableDB = new versionsTable()
 const _billingTableDB = new billingTable()
 
-export default async function createIssues(
-	parentIssueId,
-	parentIssueClientId,
-	invoiceDate
-) {
-	let parentIssueClientName = (await getCompanyAPI(parentIssueClientId)).name
+export default async function createIssues(parentIssueData) {
+	let { parentIssueId, parentIssueClientId, invoiceDate } =
+		await parseParentIssueData(parentIssueData)
+
+	let parentIssueClientInfo = await getCompanyAPI(parentIssueClientId)
+	let parentIssueClientName = parentIssueClientInfo.name
+
 	let activeClients = await _clientsTableDB.getActiveClients()
 
 	// Проверка есть ли обслуживающая организация в БД
@@ -50,6 +61,7 @@ export default async function createIssues(
 		)
 	}
 
+	// Перебор клиентов с биллингуемым оборудованием
 	let curClientId
 	let curClientName
 	let curClientServicer
@@ -57,7 +69,6 @@ export default async function createIssues(
 	let curTariffId
 	let curPrice
 	let curVersionId
-	// Перебор клиентов с биллингуемым оборудованием
 	for (let client of activeClients) {
 		curClientId = client.company_id
 		curClientName = client.company_name
@@ -72,9 +83,11 @@ export default async function createIssues(
 				parentIssueId,
 				curClientId,
 				curClientName,
-				curEquipments
+				curEquipments,
+				_nestedType
 			)
 
+			// Добавление биллинга в БД
 			for (let curEquipId of curEquipments) {
 				curTariffId = await getCurTariffId(curEquipId)
 				curPrice = await getCurPrice(curTariffId)
@@ -97,9 +110,20 @@ export default async function createIssues(
 				curClientId,
 				curEquipments,
 				curVersionId,
-				'30.04.2025'
+				invoiceDate
 			)
 
+			// Добавление атрибутов в заявку
+			let curIssueParams = await parseParametersForNestedIssue(
+				parentIssueClientInfo,
+				parentIssueData
+			)
+			await changeIssueParamsAPI(curIssueId, curIssueParams, invoiceDate)
+
+			// Смена статуса и комментарий
+			await addCommentToIssueAPI(curIssueId, _commentNestedEndText)
+			await new Promise(resolve => setTimeout(resolve, 200))
+			await changeStatusAPI(curIssueId, _nestedEndStatus)
 			await new Promise(resolve => setTimeout(resolve, 200))
 		}
 	}

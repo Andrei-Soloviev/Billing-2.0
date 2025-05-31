@@ -70,7 +70,6 @@ export default async function createDecoding(
 					`./modules/createDecoding/Расшифровки/curDecoding.html`,
 					html
 				)
-				console.log('HTML сгенерирован!')
 			}
 		)
 
@@ -96,7 +95,7 @@ export default async function createDecoding(
 				`./modules/createDecoding/Расшифровки/Расшифровка для ${companyName}.pdf`,
 				(err, res) => {
 					if (err) reject(console.error('Error creating PDF:', err))
-					console.log('PDF created:', res)
+					console.log('PDF created:', res.filename)
 					// Возврат пути
 					resolve(res.filename)
 				}
@@ -107,6 +106,7 @@ export default async function createDecoding(
 	await addFileToIssueAPI(
 		issueId,
 		`Расшифровка для ${companyName}`,
-		decodingFilePath
+		decodingFilePath,
+		true
 	)
 }

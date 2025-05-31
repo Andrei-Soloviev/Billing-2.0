@@ -3,7 +3,8 @@ export default async function addNestedIssueAPI(
 	parentId,
 	clientId,
 	clientName,
-	equipmentsIds
+	equipmentsIds,
+	typeCode
 ) {
 	let result
 
@@ -19,6 +20,7 @@ export default async function addNestedIssueAPI(
 				company_id: clientId,
 				equipment_ids: equipmentsIds,
 				parent_id: parentId,
+				type: typeCode,
 			}),
 		}
 	)

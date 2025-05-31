@@ -5,7 +5,8 @@ import { _account, _commentAuthorId, _token } from '../settings/setSettings.js'
 export default async function addFileToIssueAPI(
 	issueId,
 	commentText,
-	filePath
+	filePath,
+	isPublic
 ) {
 	let result
 
@@ -16,6 +17,7 @@ export default async function addFileToIssueAPI(
 
 	let formData = new FormData()
 	formData.append('comment[content]', commentText)
+	formData.append('comment[public]', isPublic)
 	formData.append('comment[author_id]', _commentAuthorId)
 	// Добавление файла в formatData
 	formData.append(
