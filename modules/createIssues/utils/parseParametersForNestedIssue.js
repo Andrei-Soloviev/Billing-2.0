@@ -19,6 +19,7 @@ import {
 	_issuePayBeforeCode,
 	_issuePeriodCode,
 } from '../../../settings/setSettings.js'
+import getCalculationPeriod from './getCalculationPeriod.js'
 
 export default async function parseParentIssueData(
 	parentIssueClientInfo,
@@ -50,27 +51,14 @@ export default async function parseParentIssueData(
 
 	// Атрибуты родительской заявки
 	curIssueParams[_issueInvoiceDateParamCode] = invoiceDate
-	let monthRatio = {
-		'01': 'январь',
-		'02': 'февраль',
-		'03': 'март',
-		'04': 'апрель',
-		'05': 'май',
-		'06': 'июнь',
-		'07': 'июль',
-		'08': 'август',
-		'09': 'сентябрь',
-		10: 'октябрь',
-		11: 'ноябрь',
-		12: 'декабрь',
-	}
 	for (let elem of parentIssueData.parameters) {
 		if (elem.code == _issueInvoiceDateParamCode) {
 			let curMonthNumber = String(elem.value).split('-')[1]
 			let secondMonthNumber = (Number(curMonthNumber) + 1) % 12
 			let curYear = String(elem.value).split('-')[0]
+			let curPeriod = await getCalculationPeriod(invoiceDate)
 
-			curIssueParams[_issuePeriodCode] = monthRatio[curMonthNumber]
+			curIssueParams[_issuePeriodCode] = curPeriod
 			if (curMonthNumber == 12) {
 				curIssueParams[_issuePayBeforeCode] = `${
 					Number(curYear) + 1

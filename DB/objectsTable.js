@@ -83,10 +83,10 @@ export default class objectsTable {
 		}
 	}
 
-	async findObjectsByCompanyId(id) {
+	async findActiveObjectsByCompanyId(id) {
 		let query = `SELECT object_id, company_id, tariff_id, name, number_vehicle, owner_sim, number_sim, avtograf, is_active
 			FROM objects
-			WHERE company_id=$1;`
+			WHERE company_id=$1 and is_active=true;`
 		try {
 			let queryRes = await this.pool.query(query, [id])
 			return queryRes.rows || null

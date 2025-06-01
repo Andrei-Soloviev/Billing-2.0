@@ -2,13 +2,11 @@ import getBillableEquipmentsListAPI from '../../API/getBillableEquipmentsListAPI
 import getCompanyAPI from '../../API/getCompanyAPI.js'
 import clientsTable from '../../DB/clientsTable.js'
 import objectsTable from '../../DB/objectsTable.js'
-import tariffsTable from '../../DB/tariffsTable.js'
 import checkIsClientInDB from './utils/checkIsClientInDB.js'
 import checkIsObjectInDB from './utils/checkIsObjectInDB.js'
 import parseClientData from './utils/parseClientData.js'
 import parseEquipmentData from './utils/parseEquipmentData.js'
 
-const _tariffsTableDB = new tariffsTable()
 const _clientsTableDB = new clientsTable()
 const _objectsTableDB = new objectsTable()
 

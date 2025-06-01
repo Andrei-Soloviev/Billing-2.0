@@ -24,6 +24,7 @@ export default class versionsTable {
 			servicer_company_id INT NOT NULL,
 			issue_id INT,
 			calculation_period VARCHAR(50),
+			invoice_date DATE,
 			is_cancelled BOOLEAN DEFAULT FALSE,
 			FOREIGN KEY (servicer_company_id) REFERENCES Servicers(company_id)
 		);`
@@ -34,15 +35,48 @@ export default class versionsTable {
 			console.error(`Ошибка при создании таблицы Версии: ${err}`)
 		}
 	}
-	async addVersion(servicerId, issueID, calculationPeriod, isCancelled) {
+
+	async getAllVersions() {
+		let query = `SELECT *
+			FROM versions;`
+		try {
+			let queryRes = await this.pool.query(query)
+			console.log(`Получен список Версий`)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения списка Версий`)
+		}
+	}
+
+	async getActiveVersions() {
+		let query = `SELECT *
+			FROM versions
+			WHERE is_cancelled=false`
+		try {
+			let queryRes = await this.pool.query(query)
+			console.log(`Получен список активных Версий`)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения списка активных Версий`)
+		}
+	}
+
+	async addVersion(
+		servicerId,
+		issueID,
+		calculationPeriod,
+		invoiceDate,
+		isCancelled
+	) {
 		let query = `INSERT INTO versions(
-			servicer_company_id, issue_id, calculation_period, is_cancelled)
-			VALUES ($1, $2, $3, $4);`
+			servicer_company_id, issue_id, calculation_period, invoice_date,  is_cancelled)
+			VALUES ($1, $2, $3, $4, $5);`
 		try {
 			let queryResult = await this.pool.query(query, [
 				servicerId,
 				issueID,
 				calculationPeriod,
+				invoiceDate,
 				isCancelled,
 			])
 			console.log(`В БД успешно вставлена Версия`)
@@ -53,7 +87,7 @@ export default class versionsTable {
 	}
 
 	async findVersionById(id) {
-		let query = `SELECT version_id, servicer_company_id, issue_id, calculation_period, is_cancelled
+		let query = `SELECT version_id, servicer_company_id, issue_id, calculation_period, invoice_date, is_cancelled
 			FROM versions
 			WHERE version_id=$1;`
 		try {
@@ -65,7 +99,7 @@ export default class versionsTable {
 	}
 
 	async findVersionByIssueId(id) {
-		let query = `SELECT version_id, servicer_company_id, issue_id, calculation_period, is_cancelled
+		let query = `SELECT version_id, servicer_company_id, issue_id, calculation_period, invoice_date, is_cancelled
 			FROM versions
 			WHERE issue_id=$1;`
 		try {

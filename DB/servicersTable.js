@@ -21,7 +21,7 @@ export default class servicersTable {
 	async createTableServicersIfNotExists() {
 		const query = `CREATE TABLE IF NOT EXISTS Servicers (
     	company_id INT PRIMARY KEY,
-    	company_name VARCHAR(255) NOT NULL,
+    	company_name VARCHAR(255) NOT NULL
 		);`
 		try {
 			await this.pool.query(query)

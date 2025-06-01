@@ -15,6 +15,7 @@ import {
 import createDecoding from '../createDecoding/createDecoding.js'
 import createSpecification from '../createSpecification/createSpecification.js'
 import checkIsServicerInDB from './utils/checkIsServicerInDB.js'
+import getCalculationPeriod from './utils/getCalculationPeriod.js'
 import getCurClientServicer from './utils/getCurClientServicer.js'
 import getCurEquipment from './utils/getCurEquipment.js'
 import getCurPrice from './utils/getCurPrice.js'
@@ -27,15 +28,14 @@ const _clientsTableDB = new clientsTable()
 const _servicersTableDB = new servicersTable()
 const _versionsTableDB = new versionsTable()
 const _billingTableDB = new billingTable()
-
 export default async function createIssues(parentIssueData) {
 	let { parentIssueId, parentIssueClientId, invoiceDate } =
 		await parseParentIssueData(parentIssueData)
 
 	let parentIssueClientInfo = await getCompanyAPI(parentIssueClientId)
 	let parentIssueClientName = parentIssueClientInfo.name
-
 	let activeClients = await _clientsTableDB.getActiveClients()
+	let calculationPeriod = await getCalculationPeriod(invoiceDate)
 
 	// Проверка есть ли обслуживающая организация в БД
 	let isServicerInDB = await checkIsServicerInDB(parentIssueClientId)
@@ -44,18 +44,18 @@ export default async function createIssues(parentIssueData) {
 			parentIssueClientId,
 			parentIssueClientName
 		)
-		console.log(
-			await _versionsTableDB.addVersion(
-				parentIssueClientId,
-				parentIssueId,
-				invoiceDate,
-				false
-			)
+		await _versionsTableDB.addVersion(
+			parentIssueClientId,
+			parentIssueId,
+			calculationPeriod,
+			invoiceDate,
+			false
 		)
 	} else {
 		await _versionsTableDB.addVersion(
 			parentIssueClientId,
 			parentIssueId,
+			calculationPeriod,
 			invoiceDate,
 			false
 		)
@@ -116,7 +116,8 @@ export default async function createIssues(parentIssueData) {
 			// Добавление атрибутов в заявку
 			let curIssueParams = await parseParametersForNestedIssue(
 				parentIssueClientInfo,
-				parentIssueData
+				parentIssueData,
+				invoiceDate
 			)
 			await changeIssueParamsAPI(curIssueId, curIssueParams, invoiceDate)
 
