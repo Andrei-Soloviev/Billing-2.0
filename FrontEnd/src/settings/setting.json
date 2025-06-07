@@ -1,0 +1,30 @@
+{
+	"originalTableHeaders": [
+		"Время последнего запроса в Okdesk",
+		"Актуальность данных в Okdesk"
+	],
+	"versionsTableHeaders": [
+		"ID версии",
+		"ID заявки",
+		"Период расчета",
+		"Дата счета",
+		"Версия отменена?",
+		""
+	],
+	"CpTableHeaders": [
+		"Номер позиции",
+		"ID версии биллинга",
+		"ID версии ТС",
+		"ID заявки",
+		"Сумма на момент расчета"
+	],
+
+	"mainUrl": "https://api-calendarplan-001-test.helpdesk.systems",
+
+	"proxyGetVersionsDataUrl": "/api/versions/list",
+	"getVersionsDataUrl": "https://api-billing-002-test.helpdesk.systems/versions/list",
+	"proxyCreateVersionUrl": "/api/createnewcalendarplan",
+	"createVersionUrl": "https://api-calendarplan-001-test.helpdesk.systems/createnewcalendarplan",
+	"proxyGetVersion": "/api/version/",
+	"getVersion": "https://api-billing-002-test.helpdesk.systems/version/"
+}

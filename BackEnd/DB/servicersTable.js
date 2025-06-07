@@ -30,6 +30,18 @@ export default class servicersTable {
 			console.error(`Ошибка при создании таблицы Обс.организации: ${err}`)
 		}
 	}
+
+	async getServicers() {
+		const query = `SELECT *
+			FROM servicers;`
+		try {
+			let queryRes = await this.pool.query(query)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения таблицы Обс.организации: ${err}`)
+		}
+	}
+
 	async addServicer(id, name) {
 		let query = `INSERT INTO servicers(
 			company_id, company_name)

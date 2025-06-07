@@ -1,0 +1,65 @@
+$cell-width: 210px;
+
+.table {
+	padding-right: 10px;
+	max-height: 499px;
+	overflow: hidden;
+	overflow-y: auto;
+
+	// Стили для таблицы версий
+	&.tableVersions .table__header .table__string .table__cell {
+		border-top: none;
+	}
+	&.tableVersions .table__string .table__cell {
+		border-bottom: none;
+	}
+}
+
+// Стили для первой строки таблицы
+.table__header .table__string .table__cell {
+	border-bottom: none;
+}
+
+// Стили для всех строк таблицы
+.table__string {
+	display: flex;
+	align-items: stretch;
+	border-collapse: collapse;
+
+	&:not(:last-child) .table__cell {
+		border-bottom: none;
+	}
+	&:not(:last-child) .table__btn {
+		border-bottom: none;
+	}
+}
+
+// Стили для ячеек таблицы
+.table__cell {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 10px;
+	width: $cell-width;
+	min-height: 30px;
+	text-align: center;
+	border: 1px solid black;
+	vertical-align: middle;
+
+	&:not(:last-child) {
+		border-right: none;
+	}
+}
+
+// Стили для кнопок таблицы
+.table__btn {
+	border-radius: 0;
+	width: $cell-width;
+	z-index: 100;
+	height: 100%;
+
+	// Не активно, т.к. изменился дизайн
+	&_nextAftHovered {
+		/* border-top-color: #b30216; */
+	}
+}

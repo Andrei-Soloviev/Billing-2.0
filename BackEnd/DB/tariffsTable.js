@@ -19,7 +19,7 @@ export default class tariffsTable {
 	}
 
 	async createTableTariffsIfNotExist() {
-		const query = `CREATE TABLE IF NOT EXISTS Tariffs (
+		const query = `CREATE TABLE IF NOT EXISTS tariffs (
 			tariff_id INT PRIMARY KEY,
 			tariff_name VARCHAR(255) NOT NULL,
 			tariff_price DECIMAL(10, 2) NOT NULL,

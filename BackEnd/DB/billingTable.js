@@ -36,6 +36,17 @@ export default class billingTable {
 		}
 	}
 
+	async getBilling() {
+		const query = `SELECT *
+			FROM billing;`
+		try {
+			let queryRes = await this.pool.query(query)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения  Биллинга: ${err}`)
+		}
+	}
+
 	async addBilling(versionId, objectId, issueId, curPrice) {
 		let query = `INSERT INTO billing(
 			version_id, object_id, issue_id, price_payment_time)

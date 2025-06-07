@@ -10,6 +10,7 @@
 		"express": "^5.1.0",
 		"html-pdf": "^3.0.1",
 		"pg": "^8.16.0",
-		"puppeteer": "^24.9.0"
+		"puppeteer": "^24.9.0",
+		"wkhtmltopdf": "^0.4.0"
 	}
 }

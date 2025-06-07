@@ -39,6 +39,18 @@ export default class objectsTable {
 			console.error(`Ошибка при создании таблицы Объекты: ${err}`)
 		}
 	}
+
+	async getObjects() {
+		const query = `SELECT *
+			FROM objects;`
+		try {
+			let queryRes = await this.pool.query(query)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения Объектов: ${err}`)
+		}
+	}
+
 	async addObject(
 		id,
 		companyId,

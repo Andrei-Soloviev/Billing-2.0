@@ -33,6 +33,17 @@ export default class clientsTable {
 		}
 	}
 
+	async getClients() {
+		const query = `SELECT *
+			FROM clients;`
+		try {
+			let queryRes = await this.pool.query(query)
+			return queryRes.rows
+		} catch (err) {
+			console.error(`Ошибка получения  Клиентов: ${err}`)
+		}
+	}
+
 	async getActiveClients() {
 		const query = `SELECT *
 			FROM clients

@@ -25,6 +25,12 @@ import objectsTable from './DB/objectsTable.js'
 import servicersTable from './DB/servicersTable.js'
 import tariffsTable from './DB/tariffsTable.js'
 import versionsTable from './DB/versionsTable.js'
+import { insertBilling } from './datamart/datamartBilling.js'
+import { insertClient } from './datamart/datamartClients.js'
+import { insertObject } from './datamart/datamartObjects.js'
+import { insertServicer } from './datamart/datamartServicers.js'
+import { insertTariff } from './datamart/datamartTariffs.js'
+import { insertVersion } from './datamart/datamartVersions.js'
 import { routers } from './routers/routers.js'
 
 const _tariffsTableDB = new tariffsTable()
@@ -47,6 +53,14 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.listen(PORT, () => console.log(`work on Port: ${PORT}`))
 
+/* await truncateTariffsCascade() */
+const tariffs = await _tariffsTableDB.getTariffs()
+const servicers = await _servicersTableDB.getServicers()
+const versions = await _versionsTableDB.getAllVersions()
+const clients = await _clientsTableDB.getClients()
+const objects = await _objectsTableDB.getObjects()
+const billing = await _billingTableDB.getBilling()
+
 app.get('/', (req, res) => {
 	res.send('Приложение работает')
 	res.status(200)
@@ -65,12 +79,34 @@ app.post('/', async (req, res) => {
 		await createIssues(issueData)
 		await changeStatusAPI(issueId, _parentCreateEndStatus)
 		await addCommentToIssueAPI(issueId, _commentCreateEndText)
+		for (let tariff of tariffs) {
+			await insertTariff(tariff)
+		}
+		for (let servicer of servicers) {
+			await insertServicer(servicer)
+		}
+		for (let version of versions) {
+			await insertVersion(version)
+		}
+		for (let client of clients) {
+			await insertClient(client)
+		}
+		for (let object of objects) {
+			await insertObject(object)
+		}
+		for (let invoice of billing) {
+			await insertBilling(invoice)
+		}
 	} else if (curType == _parentType && curStatus == _parentCancelStartStatus) {
 		await addCommentToIssueAPI(issueId, _commentCancelStartText)
 		await deleteIssues(issueId)
 		await changeStatusAPI(issueId, _parentCancelEndStatus)
 		await addCommentToIssueAPI(issueId, _commentCancelEndText)
+		for (let version of versions) {
+			await insertVersion(version)
+		}
 	}
+
 	res.send(req.body)
 	res.status(200)
 })

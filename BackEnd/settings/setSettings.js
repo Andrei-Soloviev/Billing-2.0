@@ -68,3 +68,6 @@ export const _companyBankPaymentAccountCode =
 export const _companyBikCode = settings.companyParametersCodes.bik
 export const _companyBankCode = settings.companyParametersCodes.bank
 export const _companyDirectorCode = settings.companyParametersCodes.director
+
+export const _parentIssueTitle = settings.parentIssue.title
+export const _parentIssueCompanyId = settings.parentIssue.companyId

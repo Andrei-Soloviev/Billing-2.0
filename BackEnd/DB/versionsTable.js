@@ -19,7 +19,7 @@ export default class versionsTable {
 	}
 
 	async createTableVersionsIfNotExists() {
-		const query = `CREATE TABLE IF NOT EXISTS Versions (
+		const query = `CREATE TABLE IF NOT EXISTS versions (
 			version_id SERIAL PRIMARY KEY,
 			servicer_company_id INT NOT NULL,
 			issue_id INT,

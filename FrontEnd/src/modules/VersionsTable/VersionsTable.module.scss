@@ -1,0 +1,30 @@
+.versionsTableBlock {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	align-items: start;
+	gap: 25px;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		width: 1260px;
+		height: 1px;
+		background-color: #000;
+		transform: scaleY(0.9);
+	}
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 0px;
+		width: 1260px;
+		height: 1px;
+		background-color: #000;
+		transform: scaleY(0.9);
+	}
+}
+
+.versionsTable__btn_create {
+	margin-top: 0;
+}
