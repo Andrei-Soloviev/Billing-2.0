@@ -19,7 +19,7 @@ export default async function getVersionLinkAPI(id, setIssueLink) {
 			throw new Error(`HTTP error! status: ${req.status}`)
 		}
 
-		setIssueLink(result)
+		setIssueLink(result.link)
 	} catch (err) {
 		console.error('Ошибка получения ссылки на заявку:', err)
 	}

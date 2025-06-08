@@ -65,7 +65,7 @@ export function VersionsTable() {
 			{/* Уведомление об успехе или ошибки */}
 			{showNotice && (
 				<Notice
-					noticeText={isError ? errorText : 'Версия успешно создана'}
+					noticeText={isError ? errorText : 'Создание версии успешно запущено'}
 					setOpenNotice={setShowNotice}
 					noticeType={isError ? 'error' : 'notice'}
 				/>

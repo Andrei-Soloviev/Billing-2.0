@@ -66,12 +66,23 @@ routers.post('/versions', async (req, res) => {
 })
 
 // Отмена версии
-routers.delete(`/version/:id`, async (req, res) => {
+routers.get(`/version/cancel/:id`, async (req, res) => {
 	const { id } = req.params
 	console.log(id)
 	let issueId = (await _versionsTableDB.findVersionById(id)).issue_id
 	console.log(issueId)
 	await changeStatusAPI(issueId, _parentCancelStartStatus)
 	res.send({ issueId: 'Отменена' })
+	res.status(200)
+})
+
+// Запуск отмененной версии
+routers.get(`/version/start/:id`, async (req, res) => {
+	const { id } = req.params
+	console.log(id)
+	let issueId = (await _versionsTableDB.findVersionById(id)).issue_id
+	console.log(issueId)
+	await changeStatusAPI(issueId, _parentCreateStartStatus)
+	res.send({ issueId: 'Запущена' })
 	res.status(200)
 })

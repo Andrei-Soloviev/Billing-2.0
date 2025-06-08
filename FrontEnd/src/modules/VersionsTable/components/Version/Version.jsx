@@ -1,7 +1,9 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 import settings from '../../../../settings/setting.json'
+import { Notice } from '../../../../utils/Notice/Notice'
 import { Table } from '../../../../utils/Table/table'
+import cancelVersionAPI from '../../services/cancelVersionAPI'
 import getVersionAPI from '../../services/getVersionAPI'
 import getVersionLinkAPI from '../../services/getVersionLinkAPI'
 import standartVersionData from '../../utils/standartVersionData'
@@ -15,13 +17,16 @@ export function Version({ id, isOpen, setIsOpen }) {
 	)
 	const [isCancelled, setIsCancelled] = useState(curVersion.is_cancelled)
 	const [issueLink, setIssueLink] = useState(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState(null)
+	const [loadingVersionData, setLoadingVersionData] = useState(true)
+	const [errorVersionData, setErrorVersionData] = useState(null)
+	const [showNotice, setShowNotice] = useState(false)
+	const [loadingVersionAction, setLoadingVersionAction] = useState(true)
+	const [errorVersionAction, setErrorVersionAction] = useState(null)
 
 	document.body.classList.add('modal-open')
 
 	// Получение конкретной версии
-	getVersionAPI(id, setData, setError, setLoading)
+	getVersionAPI(id, setData, setErrorVersionData, setLoadingVersionData)
 	//Получение ссылку на заявку с версией
 	getVersionLinkAPI(id, setIssueLink)
 
@@ -40,16 +45,16 @@ export function Version({ id, isOpen, setIsOpen }) {
 			<div
 				className={clsx(
 					styles.modal__content,
-					loading && styles.modal__content_loading,
-					error && styles.modal__content_error
+					loadingVersionData && styles.modal__content_loading,
+					errorVersionData && styles.modal__content_error
 				)}
 			>
 				{/* Кнопка закрытия модалки */}
 				<button
-					disabled={loading}
+					disabled={loadingVersionData}
 					className={clsx(
 						styles.modal__content__btn_close,
-						loading && 'btn_unwork'
+						loadingVersionData && 'btn_unwork'
 					)}
 					onClick={e => {
 						document.body.classList.remove('modal-open')
@@ -60,11 +65,11 @@ export function Version({ id, isOpen, setIsOpen }) {
 				</button>
 
 				{/*Блок вывода, если нет ошибок и данные получены */}
-				{error ? (
+				{errorVersionData ? (
 					<div className={clsx(styles.modal__content__error)}>
-						Error: {error}
+						Error: {errorVersionData}
 					</div>
-				) : loading ? (
+				) : loadingVersionData ? (
 					<div className={clsx(styles.modal__content__loading)}>
 						Загрузка...
 					</div>
@@ -75,7 +80,7 @@ export function Version({ id, isOpen, setIsOpen }) {
 							content={
 								standartVersionData(data) != 'Error'
 									? standartVersionData(data)
-									: setError('Ошибка стандартизации данных')
+									: setErrorVersionData('Ошибка стандартизации данных')
 							}
 							tableMaxHeight={696}
 							className='CpTable'
@@ -86,10 +91,31 @@ export function Version({ id, isOpen, setIsOpen }) {
 							<a className='button' href={issueLink} target='_blank'>
 								Открыть версию в Okdesk
 							</a>
-							{isCancelled ? (
-								<button>Запустить версию</button>
-							) : (
-								<button>Отменить версию</button>
+							{!isCancelled && (
+								<button
+									onClick={e => {
+										cancelVersionAPI(
+											id,
+											setErrorVersionAction,
+											setLoadingVersionAction,
+											setShowNotice,
+											setIsCancelled
+										)
+									}}
+								>
+									Отменить версию
+								</button>
+							)}
+							{showNotice && (
+								<Notice
+									noticeText={
+										errorVersionAction
+											? errorVersionAction
+											: 'Отмена версии успешно запущена'
+									}
+									setOpenNotice={setShowNotice}
+									noticeType={errorVersionAction ? 'error' : 'notice'}
+								/>
 							)}
 						</div>
 					</div>
