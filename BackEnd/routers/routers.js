@@ -6,6 +6,7 @@ import billingTable from '../DB/billingTable.js'
 import versionsTable from '../DB/versionsTable.js'
 import getCalculationPeriod from '../modules/createIssues/utils/getCalculationPeriod.js'
 import {
+	_account,
 	_issueInvoiceDateParamCode,
 	_parentCancelStartStatus,
 	_parentCreateStartStatus,
@@ -39,6 +40,14 @@ routers.get(`/version/:id`, async (req, res) => {
 	res.status(200)
 })
 
+// Ссылка на заявку по версии
+routers.get('/version/link/:id', async (req, res) => {
+	const { id } = req.params
+	let issueId = (await _versionsTableDB.findVersionById(id)).issue_id
+	res.send({ link: `https://${_account}.okdesk.ru/issues/${issueId}` })
+	res.status(200)
+})
+
 // Создание версии
 routers.post('/versions', async (req, res) => {
 	let invoiceDate = req.body.date
@@ -53,6 +62,7 @@ routers.post('/versions', async (req, res) => {
 	await changeIssueParamsAPI(issueId, params)
 	await changeStatusAPI(issueId, _parentCreateStartStatus)
 	res.send({ issueId: 'Создана' })
+	res.status(200)
 })
 
 // Отмена версии
@@ -63,4 +73,5 @@ routers.delete(`/version/:id`, async (req, res) => {
 	console.log(issueId)
 	await changeStatusAPI(issueId, _parentCancelStartStatus)
 	res.send({ issueId: 'Отменена' })
+	res.status(200)
 })

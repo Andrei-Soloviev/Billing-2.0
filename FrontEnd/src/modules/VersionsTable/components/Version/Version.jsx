@@ -3,20 +3,27 @@ import { useState } from 'react'
 import settings from '../../../../settings/setting.json'
 import { Table } from '../../../../utils/Table/table'
 import getVersionAPI from '../../services/getVersionAPI'
+import getVersionLinkAPI from '../../services/getVersionLinkAPI'
 import standartVersionData from '../../utils/standartVersionData'
+import { versions } from '../../VersionsTable'
 import styles from './Version.module.scss'
 
-export function Version(props) {
+export function Version({ id, isOpen, setIsOpen }) {
 	const [data, setData] = useState(null)
+	const [curVersion, setCurVersion] = useState(
+		versions.filter(elem => elem.version_id == id)[0]
+	)
+	const [isCancelled, setIsCancelled] = useState(curVersion.is_cancelled)
+	const [issueLink, setIssueLink] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
 
-	let { id, isOpen, setIsOpen } = props // Деструктуризация объекта. Позволяет присваивать значения свойств переменным
-
 	document.body.classList.add('modal-open')
 
-	// Получение КП конкретной версии
+	// Получение конкретной версии
 	getVersionAPI(id, setData, setError, setLoading)
+	//Получение ссылку на заявку с версией
+	getVersionLinkAPI(id, setIssueLink)
 
 	return (
 		<div className={clsx(styles.modal, styles.modal_open)}>
@@ -52,7 +59,7 @@ export function Version(props) {
 					&#10006;
 				</button>
 
-				{/*Блок вывода КП, если нет ошибок и данные получены */}
+				{/*Блок вывода, если нет ошибок и данные получены */}
 				{error ? (
 					<div className={clsx(styles.modal__content__error)}>
 						Error: {error}
@@ -73,6 +80,18 @@ export function Version(props) {
 							tableMaxHeight={696}
 							className='CpTable'
 						/>
+						<div
+							className={clsx(styles.modal__content__tableContainer__buttons)}
+						>
+							<a className='button' href={issueLink} target='_blank'>
+								Открыть версию в Okdesk
+							</a>
+							{isCancelled ? (
+								<button>Запустить версию</button>
+							) : (
+								<button>Отменить версию</button>
+							)}
+						</div>
 					</div>
 				)}
 			</div>

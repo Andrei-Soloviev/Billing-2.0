@@ -9,7 +9,6 @@ export default async function getVersionAPI(id, setData, setError, setLoading) {
 			settings.getVersion
 		)
 		let url = `${baseUrl}${stringId}`
-		console.log(url)
 
 		let req = await fetch(url)
 

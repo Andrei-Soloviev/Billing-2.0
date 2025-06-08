@@ -4,11 +4,11 @@ import { Notice } from '../../utils/Notice/Notice'
 import { Table } from '../../utils/Table/table'
 import CreateVersion from './components/CreateVersion/CreateVersion'
 import { Version } from './components/Version/Version'
-import { getVersionsData } from './services/getVersionsDataAPI'
+import { getVersionsList } from './services/getVersionsListAPI'
 import { standartVersionsData } from './utils/standartVersionsData'
 import styles from './versionsTable.module.scss'
 
-let versions = await getVersionsData()
+export let versions = await getVersionsList()
 
 export function VersionsTable() {
 	const [openModal, setOpenModal] = useState(false)

@@ -10,7 +10,6 @@ export default function CreateVersion({
 	setIsLoading,
 	setNewVersionInvoiceDate,
 	newVersionInvoiceDate,
-	setVersionDataToTable,
 	btnTextAddVersion,
 	setBtnTextAddVersion,
 	setShowNotice,

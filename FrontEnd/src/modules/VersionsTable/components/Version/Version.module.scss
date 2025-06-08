@@ -65,12 +65,24 @@
 	&::after {
 		content: '';
 		position: absolute;
-		bottom: 0px;
+		bottom: 90px;
 		left: 0;
 		width: calc(100% - 10px);
 		height: 1px;
 		background-color: #000;
 		transform: scaleY(0.9);
+	}
+
+	&__buttons {
+		display: flex;
+		margin-right: 9px;
+		margin-top: 25px;
+		justify-content: space-between;
+
+		& > a,
+		& > button {
+			width: 420px;
+		}
 	}
 }
 

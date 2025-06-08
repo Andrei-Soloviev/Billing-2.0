@@ -1,9 +1,9 @@
 import settings from '../../../settings/setting.json'
 import checkProxyForUrl from '../../../utils/checkProxyForUrl'
-export async function getVersionsData() {
+export async function getVersionsList() {
 	let url = checkProxyForUrl(
-		settings.proxyGetVersionsDataUrl,
-		settings.getVersionsDataUrl
+		settings.proxyGetVersionsListUrl,
+		settings.getVersionsListUrl
 	)
 
 	let reqVersions = await fetch(url)

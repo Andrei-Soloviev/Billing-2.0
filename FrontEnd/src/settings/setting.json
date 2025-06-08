@@ -21,10 +21,14 @@
 
 	"mainUrl": "https://api-calendarplan-001-test.helpdesk.systems",
 
-	"proxyGetVersionsDataUrl": "/api/versions/list",
-	"getVersionsDataUrl": "https://api-billing-002-test.helpdesk.systems/versions/list",
+	"proxyGetVersionsListUrl": "/api/versions/list",
+	"getVersionsListUrl": "https://api-billing-002-test.helpdesk.systems/versions/list",
 	"proxyCreateVersionUrl": "/api/versions",
 	"createVersionUrl": "https://api-billing-002-test.helpdesk.systems/versions",
+	"proxyCancelVersionUrl": "/api/version/",
+	"cancelVersionUrl": "https://api-billing-002-test.helpdesk.systems/version/",
+	"proxyGetVersionLinkUrl": "/api/version/link/",
+	"getVersionLinkUrl": "https://api-billing-002-test.helpdesk.systems/version/link/",
 	"proxyGetVersion": "/api/version/",
 	"getVersion": "https://api-billing-002-test.helpdesk.systems/version/"
 }
