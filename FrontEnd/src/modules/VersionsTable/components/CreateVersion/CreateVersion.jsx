@@ -8,8 +8,8 @@ export default function CreateVersion({
 	setErrorText,
 	isLoading,
 	setIsLoading,
-	setNewVersionName,
-	newVersionName,
+	setNewVersionInvoiceDate,
+	newVersionInvoiceDate,
 	setVersionDataToTable,
 	btnTextAddVersion,
 	setBtnTextAddVersion,
@@ -39,12 +39,13 @@ export default function CreateVersion({
 					</button>
 					{/* Блок ввода названия версии */}
 					<div className={styles.modal__content__input}>
-						<span>Название версии:</span>
+						<span>Дата счета:</span>
 						<input
 							disabled={isLoading}
+							placeholder='01.01.2001'
 							type='text'
 							onChange={e => {
-								setNewVersionName(e.target.value)
+								setNewVersionInvoiceDate(e.target.value)
 							}}
 						/>
 					</div>
@@ -57,9 +58,12 @@ export default function CreateVersion({
 						onClick={async e => {
 							setIsLoading(true)
 							// Проверка введено ли имя версии
-							if (newVersionName == '' || newVersionName == undefined) {
+							if (
+								newVersionInvoiceDate == '' ||
+								newVersionInvoiceDate == undefined
+							) {
 								setIsError(true)
-								setErrorText('Не указано название версии')
+								setErrorText('Не указана дата счета')
 								setIsLoading(false)
 								setShowNotice(true)
 							}
@@ -69,17 +73,16 @@ export default function CreateVersion({
 								setBtnTextAddVersion('Загрузка...')
 								// АПИ-запрос на добавление версии
 								await addNewVersion(
-									newVersionName,
+									newVersionInvoiceDate,
 									setIsError,
 									setErrorText,
 									setOpenModal,
 									setIsLoading,
 									setBtnTextAddVersion,
-									setVersionDataToTable,
 									setShowNotice
 								)
 							}
-							setNewVersionName('')
+							setNewVersionInvoiceDate('')
 						}}
 					>
 						{btnTextAddVersion}

@@ -23,8 +23,8 @@
 
 	"proxyGetVersionsDataUrl": "/api/versions/list",
 	"getVersionsDataUrl": "https://api-billing-002-test.helpdesk.systems/versions/list",
-	"proxyCreateVersionUrl": "/api/createnewcalendarplan",
-	"createVersionUrl": "https://api-calendarplan-001-test.helpdesk.systems/createnewcalendarplan",
+	"proxyCreateVersionUrl": "/api/versions",
+	"createVersionUrl": "https://api-billing-002-test.helpdesk.systems/versions",
 	"proxyGetVersion": "/api/version/",
 	"getVersion": "https://api-billing-002-test.helpdesk.systems/version/"
 }

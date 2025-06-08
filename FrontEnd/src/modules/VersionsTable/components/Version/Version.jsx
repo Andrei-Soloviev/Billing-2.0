@@ -4,9 +4,9 @@ import settings from '../../../../settings/setting.json'
 import { Table } from '../../../../utils/Table/table'
 import getVersionAPI from '../../services/getVersionAPI'
 import standartVersionData from '../../utils/standartVersionData'
-import styles from './CP.module.scss'
+import styles from './Version.module.scss'
 
-export function CP(props) {
+export function Version(props) {
 	const [data, setData] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)

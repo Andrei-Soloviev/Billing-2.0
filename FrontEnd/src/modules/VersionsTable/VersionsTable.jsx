@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import settings from '../../settings/setting.json'
+import { Notice } from '../../utils/Notice/Notice'
 import { Table } from '../../utils/Table/table'
-import { CP } from './components/CP/CP'
+import CreateVersion from './components/CreateVersion/CreateVersion'
+import { Version } from './components/Version/Version'
 import { getVersionsData } from './services/getVersionsDataAPI'
 import { standartVersionsData } from './utils/standartVersionsData'
 import styles from './versionsTable.module.scss'
@@ -10,7 +12,7 @@ let versions = await getVersionsData()
 
 export function VersionsTable() {
 	const [openModal, setOpenModal] = useState(false)
-	const [newVersionName, setNewVersionName] = useState('')
+	const [newVersionInvoiceDate, setNewVersionInvoiceDate] = useState('')
 	const [versionDataToTable, setVersionDataToTable] = useState(
 		standartVersionsData(versions)
 	)
@@ -29,10 +31,45 @@ export function VersionsTable() {
 				className={'tableVersions'}
 				isReverse={true}
 				OnClickBtn={data => {
-					// Дата передастся в CP
-					return <CP {...data} />
+					// data передастся в Версию
+					return <Version {...data} />
 				}}
 			/>
+
+			{/* Кнопка, которая открывает модалку создания версий */}
+			<button
+				className={styles.versionsTable__btn_create}
+				onClick={e => {
+					setOpenModal(true)
+					document.body.classList.add('modal-open')
+				}}
+			>
+				Создать версию календарного плана
+			</button>
+
+			{/* Модалка создания версии */}
+			{openModal && (
+				<CreateVersion
+					setOpenModal={setOpenModal}
+					setIsError={setIsError}
+					setErrorText={setErrorText}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
+					newVersionInvoiceDate={newVersionInvoiceDate}
+					setNewVersionInvoiceDate={setNewVersionInvoiceDate}
+					btnTextAddVersion={btnTextAddVersion}
+					setBtnTextAddVersion={setBtnTextAddVersion}
+					setShowNotice={setShowNotice}
+				/>
+			)}
+			{/* Уведомление об успехе или ошибки */}
+			{showNotice && (
+				<Notice
+					noticeText={isError ? errorText : 'Версия успешно создана'}
+					setOpenNotice={setShowNotice}
+					noticeType={isError ? 'error' : 'notice'}
+				/>
+			)}
 		</div>
 	)
 }

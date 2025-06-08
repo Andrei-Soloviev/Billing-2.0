@@ -4,8 +4,10 @@ import changeIssueParamsAPI from '../API/changeIssueParamsAPI.js'
 import changeStatusAPI from '../API/changeStatusAPI.js'
 import billingTable from '../DB/billingTable.js'
 import versionsTable from '../DB/versionsTable.js'
+import getCalculationPeriod from '../modules/createIssues/utils/getCalculationPeriod.js'
 import {
 	_issueInvoiceDateParamCode,
+	_parentCancelStartStatus,
 	_parentCreateStartStatus,
 	_parentIssueCompanyId,
 	_parentIssueTitle,
@@ -14,6 +16,7 @@ import {
 
 const _versionsTableDB = new versionsTable()
 const _billingTableDB = new billingTable()
+const versions = await _versionsTableDB.getAllVersions()
 
 export const routers = express.Router()
 
@@ -29,7 +32,6 @@ routers.get('/versions/list', async (req, res) => {
 	res.send(allActiveVersions)
 	res.status(200)
 }) */
-
 routers.get(`/version/:id`, async (req, res) => {
 	const { id } = req.params
 	let version = await _billingTableDB.findBillingByVersionId(id)
@@ -37,17 +39,28 @@ routers.get(`/version/:id`, async (req, res) => {
 	res.status(200)
 })
 
+// Создание версии
 routers.post('/versions', async (req, res) => {
-	let issueId = await addIssueAPI(
-		_parentIssueCompanyId,
-		_parentType,
-		_parentIssueTitle
-	)
 	let invoiceDate = req.body.date
 	invoiceDate = invoiceDate.split('.').reverse().join('-')
+	let curMonthName = await getCalculationPeriod(invoiceDate)
+	let issueName = _parentIssueTitle + ' ' + curMonthName
+
 	let params = {}
 	params[_issueInvoiceDateParamCode] = invoiceDate
+
+	let issueId = await addIssueAPI(_parentIssueCompanyId, _parentType, issueName)
 	await changeIssueParamsAPI(issueId, params)
 	await changeStatusAPI(issueId, _parentCreateStartStatus)
-	res.send(issueId)
+	res.send({ issueId: 'Создана' })
+})
+
+// Отмена версии
+routers.delete(`/version/:id`, async (req, res) => {
+	const { id } = req.params
+	console.log(id)
+	let issueId = (await _versionsTableDB.findVersionById(id)).issue_id
+	console.log(issueId)
+	await changeStatusAPI(issueId, _parentCancelStartStatus)
+	res.send({ issueId: 'Отменена' })
 })
