@@ -19,7 +19,8 @@ export function standartVersionsData(versionData) {
 				str[key] =
 					elem[key].replace(elem[key][0], elem[key][0].toUpperCase()) + '_TEXT'
 			} else if (key.includes('invoice_date')) {
-				str[key] = String(elem[key]).split('T')[0]
+				/* str[key] = String(elem[key]).split('T') */
+				str[key] = new Date(elem[key]).toLocaleString().split(',')[0]
 			}
 		})
 		str.version_open = 'Открыть_BTN'

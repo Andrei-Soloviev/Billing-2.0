@@ -44,7 +44,7 @@ export function VersionsTable() {
 					document.body.classList.add('modal-open')
 				}}
 			>
-				Создать версию календарного плана
+				Создать версию
 			</button>
 
 			{/* Модалка создания версии */}

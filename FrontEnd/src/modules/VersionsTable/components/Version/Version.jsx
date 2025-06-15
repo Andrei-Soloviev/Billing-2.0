@@ -20,7 +20,7 @@ export function Version({ id, isOpen, setIsOpen }) {
 	const [loadingVersionData, setLoadingVersionData] = useState(true)
 	const [errorVersionData, setErrorVersionData] = useState(null)
 	const [showNotice, setShowNotice] = useState(false)
-	const [loadingVersionAction, setLoadingVersionAction] = useState(true)
+	const [loadingVersionAction, setLoadingVersionAction] = useState(false)
 	const [errorVersionAction, setErrorVersionAction] = useState(null)
 
 	document.body.classList.add('modal-open')
@@ -93,7 +93,13 @@ export function Version({ id, isOpen, setIsOpen }) {
 							</a>
 							{!isCancelled && (
 								<button
+									disabled={loadingVersionAction}
+									className={clsx(
+										/* styles.modal__content__btn_close, */
+										loadingVersionAction && 'btn_unwork'
+									)}
 									onClick={e => {
+										setLoadingVersionAction(true)
 										cancelVersionAPI(
 											id,
 											setErrorVersionAction,

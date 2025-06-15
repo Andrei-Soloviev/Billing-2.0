@@ -27,10 +27,10 @@ export default async function cancelVersionAPI(
 		}
 
 		if (result == '' || result == undefined) {
-			setError('Не запустить версию')
+			setError('Не удалось отменить версию')
 		}
 	} catch (err) {
-		console.error(`Ошибка запуска версии ${id}:`, err)
+		console.error(`Ошибка отмены версии ${id}:`, err)
 		setError(err.message)
 	} finally {
 		setLoading(false)
