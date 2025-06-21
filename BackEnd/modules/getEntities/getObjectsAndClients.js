@@ -13,16 +13,13 @@ const _objectsTableDB = new objectsTable()
 export default async function getObjectsAndClients() {
 	let startId = 0
 	let result
-
 	await _clientsTableDB.deactivateClients()
 	await _objectsTableDB.deactivateObjects()
-
 	while (true) {
 		let result = await getBillableEquipmentsListAPI(startId)
 		if (result == '' || result.parent_id != null) {
 			break
 		}
-
 		for (let elem of result) {
 			let objectId = elem.id
 			let companyId
