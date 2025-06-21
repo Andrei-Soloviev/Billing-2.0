@@ -61,12 +61,21 @@ const clients = await _clientsTableDB.getClients()
 const objects = await _objectsTableDB.getObjects()
 const billing = await _billingTableDB.getBilling()
 
+let queueWebhooks = [] // Очередь вебхуков
+let isWebhook = false // Идет ли обработка вебхука в данный момент
+
 app.get('/', (req, res) => {
 	res.send('Приложение работает')
 	res.status(200)
 })
 
 app.post('/', async (req, res) => {
+	// Проверка идет ли обработка вебхука прямо сейчас
+	if (isWebhook) {
+		queueWebhooks.push(req)
+	}
+	isWebhook = true
+
 	let issueData = req.body.issue
 	let issueId = issueData.id
 	let curType = issueData.type.code
@@ -109,6 +118,56 @@ app.post('/', async (req, res) => {
 
 	res.send(req.body)
 	res.status(200)
+	isWebhook = false
 })
 
 app.use('/', routers)
+
+// Обработка очереди вебхуков
+for (req of queueWebhooks) {
+	isWebhook = true
+
+	let issueData = req.body.issue
+	let issueId = issueData.id
+	let curType = issueData.type.code
+	let curStatus = issueData.status.code
+
+	if (curType == _parentType && curStatus == _parentCreateStartStatus) {
+		await addCommentToIssueAPI(issueId, _commentCreateStartText)
+		await getTariffs()
+		await getObjectsAndClients()
+		await createIssues(issueData)
+		await changeStatusAPI(issueId, _parentCreateEndStatus)
+		await addCommentToIssueAPI(issueId, _commentCreateEndText)
+		for (let tariff of tariffs) {
+			await insertTariff(tariff)
+		}
+		for (let servicer of servicers) {
+			await insertServicer(servicer)
+		}
+		for (let version of versions) {
+			await insertVersion(version)
+		}
+		for (let client of clients) {
+			await insertClient(client)
+		}
+		for (let object of objects) {
+			await insertObject(object)
+		}
+		for (let invoice of billing) {
+			await insertBilling(invoice)
+		}
+	} else if (curType == _parentType && curStatus == _parentCancelStartStatus) {
+		await addCommentToIssueAPI(issueId, _commentCancelStartText)
+		await deleteIssues(issueId)
+		await changeStatusAPI(issueId, _parentCancelEndStatus)
+		await addCommentToIssueAPI(issueId, _commentCancelEndText)
+		for (let version of versions) {
+			await insertVersion(version)
+		}
+	}
+
+	res.send(req.body)
+	res.status(200)
+	isWebhook = false
+}
