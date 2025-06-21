@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import settings from '../../../../settings/setting.json'
 import { Notice } from '../../../../utils/Notice/Notice'
 import { Table } from '../../../../utils/Table/table'
@@ -25,10 +25,14 @@ export function Version({ id, isOpen, setIsOpen }) {
 
 	document.body.classList.add('modal-open')
 
-	// Получение конкретной версии
-	getVersionAPI(id, setData, setErrorVersionData, setLoadingVersionData)
-	//Получение ссылку на заявку с версией
-	getVersionLinkAPI(id, setIssueLink)
+	// Запросы к API при изменении id
+	useEffect(() => {
+		// Получение конкретной версии
+		getVersionAPI(id, setData, setErrorVersionData, setLoadingVersionData)
+
+		//Получение ссылку на заявку с версией
+		getVersionLinkAPI(id, setIssueLink)
+	}, [id])
 
 	return (
 		<div className={clsx(styles.modal, styles.modal_open)}>
