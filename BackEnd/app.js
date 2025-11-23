@@ -171,3 +171,14 @@ for (req of queueWebhooks) {
 	res.status(200)
 	isWebhook = false
 }
+
+// Отловы ошибок, чтобы приложение не падало при ошибках
+process.on('uncaughtException', error => {
+	console.error('Uncaught Exception:', error)
+	// Приложение продолжит работу
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+	// Приложение продолжит работу
+})
