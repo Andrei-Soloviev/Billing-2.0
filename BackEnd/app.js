@@ -4,10 +4,12 @@ import {
 	_commentCancelStartText,
 	_commentCreateEndText,
 	_commentCreateStartText,
+	_commentWrongCompanyText,
 	_parentCancelEndStatus,
 	_parentCancelStartStatus,
 	_parentCreateEndStatus,
 	_parentCreateStartStatus,
+	_parentIssueCompanyId,
 	_parentType,
 } from './settings/setSettings.js'
 
@@ -70,6 +72,10 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', async (req, res) => {
+	// Сразу кидаем статус, чтобы избежать повторных вебхуков
+	res.send(req.body)
+	res.status(200)
+
 	// Проверка идет ли обработка вебхука прямо сейчас
 	if (isWebhook) {
 		queueWebhooks.push(req)
@@ -80,31 +86,38 @@ app.post('/', async (req, res) => {
 	let issueId = issueData.id
 	let curType = issueData.type.code
 	let curStatus = issueData.status.code
+	let curClientId = issueData.client.company.id
 
 	if (curType == _parentType && curStatus == _parentCreateStartStatus) {
-		await addCommentToIssueAPI(issueId, _commentCreateStartText)
-		await getTariffs()
-		await getObjectsAndClients()
-		await createIssues(issueData)
-		await changeStatusAPI(issueId, _parentCreateEndStatus)
-		await addCommentToIssueAPI(issueId, _commentCreateEndText)
-		for (let tariff of tariffs) {
-			await insertTariff(tariff)
-		}
-		for (let servicer of servicers) {
-			await insertServicer(servicer)
-		}
-		for (let version of versions) {
-			await insertVersion(version)
-		}
-		for (let client of clients) {
-			await insertClient(client)
-		}
-		for (let object of objects) {
-			await insertObject(object)
-		}
-		for (let invoice of billing) {
-			await insertBilling(invoice)
+		// Проверка "Выбрана ли правильная компания"
+		if (curClientId == _parentIssueCompanyId) {
+			await addCommentToIssueAPI(issueId, _commentCreateStartText)
+			// Получение текущего состояния из Okdesk
+			await getTariffs()
+			await getObjectsAndClients()
+			await createIssues(issueData)
+			await changeStatusAPI(issueId, _parentCreateEndStatus)
+			await addCommentToIssueAPI(issueId, _commentCreateEndText)
+			for (let tariff of tariffs) {
+				await insertTariff(tariff)
+			}
+			for (let servicer of servicers) {
+				await insertServicer(servicer)
+			}
+			for (let version of versions) {
+				await insertVersion(version)
+			}
+			for (let client of clients) {
+				await insertClient(client)
+			}
+			for (let object of objects) {
+				await insertObject(object)
+			}
+			for (let invoice of billing) {
+				await insertBilling(invoice)
+			}
+		} else {
+			await addCommentToIssueAPI(issueId, _commentWrongCompanyText)
 		}
 	} else if (curType == _parentType && curStatus == _parentCancelStartStatus) {
 		await addCommentToIssueAPI(issueId, _commentCancelStartText)
@@ -116,8 +129,6 @@ app.post('/', async (req, res) => {
 		}
 	}
 
-	res.send(req.body)
-	res.status(200)
 	isWebhook = false
 })
 
@@ -171,14 +182,3 @@ for (req of queueWebhooks) {
 	res.status(200)
 	isWebhook = false
 }
-
-// Отловы ошибок, чтобы приложение не падало при ошибках
-process.on('uncaughtException', error => {
-	console.error('Uncaught Exception:', error)
-	// Приложение продолжит работу
-})
-
-process.on('unhandledRejection', (reason, promise) => {
-	console.error('Unhandled Rejection at:', promise, 'reason:', reason)
-	// Приложение продолжит работу
-})

@@ -44,6 +44,7 @@ export const _issuePayBeforeCode = settings.issue.params.payBefore
 
 export const _commentAuthorId = settings.issue.comments.authorId
 export const _commentCreateStartText = settings.issue.comments.createStartText
+export const _commentWrongCompanyText = settings.issue.comments.wrongCompanyText
 export const _commentCreateEndText = settings.issue.comments.createEndText
 export const _commentCancelStartText = settings.issue.comments.cancelStartText
 export const _commentCancelEndText = settings.issue.comments.cancelEndText
