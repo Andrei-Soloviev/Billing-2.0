@@ -16,7 +16,7 @@ export default async function addNestedIssueAPI(
 				'Content-Type': 'application/json;charset=utf-8',
 			},
 			body: JSON.stringify({
-				title: `Расчет АО для "${clientName}"`,
+				title: `Расчет ИТС для "${clientName}"`,
 				company_id: clientId,
 				equipment_ids: equipmentsIds,
 				parent_id: parentId,
