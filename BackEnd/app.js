@@ -33,6 +33,7 @@ import { insertObject } from './datamart/datamartObjects.js'
 import { insertServicer } from './datamart/datamartServicers.js'
 import { insertTariff } from './datamart/datamartTariffs.js'
 import { insertVersion } from './datamart/datamartVersions.js'
+import isIssueMiddleware from './middlewares/isIssueMiddleware.js'
 import { routers } from './routers/routers.js'
 
 const _tariffsTableDB = new tariffsTable()
@@ -71,10 +72,10 @@ app.get('/', (req, res) => {
 	res.status(200)
 })
 
-app.post('/', async (req, res) => {
+app.post('/', isIssueMiddleware, async (req, res) => {
 	// Сразу кидаем статус, чтобы избежать повторных вебхуков
-	res.send(req.body)
 	res.status(200)
+	res.send('Вебхук принят')
 
 	// Проверка идет ли обработка вебхука прямо сейчас
 	if (isWebhook) {
@@ -98,7 +99,9 @@ app.post('/', async (req, res) => {
 			await createIssues(issueData)
 			await changeStatusAPI(issueId, _parentCreateEndStatus)
 			await addCommentToIssueAPI(issueId, _commentCreateEndText)
-			for (let tariff of tariffs) {
+
+			// Вставка данных в кликхаус
+			/* for (let tariff of tariffs) {
 				await insertTariff(tariff)
 			}
 			for (let servicer of servicers) {
@@ -115,7 +118,7 @@ app.post('/', async (req, res) => {
 			}
 			for (let invoice of billing) {
 				await insertBilling(invoice)
-			}
+			} */
 		} else {
 			await addCommentToIssueAPI(issueId, _commentWrongCompanyText)
 		}
@@ -124,9 +127,9 @@ app.post('/', async (req, res) => {
 		await deleteIssues(issueId)
 		await changeStatusAPI(issueId, _parentCancelEndStatus)
 		await addCommentToIssueAPI(issueId, _commentCancelEndText)
-		for (let version of versions) {
+		/* for (let version of versions) {
 			await insertVersion(version)
-		}
+		} */
 	}
 
 	isWebhook = false

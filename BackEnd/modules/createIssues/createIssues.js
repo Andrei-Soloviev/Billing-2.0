@@ -119,7 +119,7 @@ export default async function createIssues(parentIssueData) {
 				parentIssueData,
 				invoiceDate
 			)
-			await changeIssueParamsAPI(curIssueId, curIssueParams, invoiceDate)
+			await changeIssueParamsAPI(curIssueId, curIssueParams)
 
 			// Смена статуса и комментарий
 			await addCommentToIssueAPI(curIssueId, _commentNestedEndText)

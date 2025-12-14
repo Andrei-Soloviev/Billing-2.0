@@ -54,7 +54,7 @@ export default async function parseParentIssueData(
 	for (let elem of parentIssueData.parameters) {
 		if (elem.code == _issueInvoiceDateParamCode) {
 			let curMonthNumber = String(elem.value).split('-')[1]
-			let secondMonthNumber = (Number(curMonthNumber) + 1) % 12
+			let secondMonthNumber = (Number(curMonthNumber) % 12) + 1
 			let curYear = String(elem.value).split('-')[0]
 			let curPeriod = await getCalculationPeriod(invoiceDate)
 
