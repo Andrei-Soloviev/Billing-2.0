@@ -1,18 +1,11 @@
 import express from 'express'
-import addIssueAPI from '../API/addIssueAPI.js'
-import changeIssueParamsAPI from '../API/changeIssueParamsAPI.js'
 import changeStatusAPI from '../API/changeStatusAPI.js'
 import billingTable from '../DB/billingTable.js'
 import versionsTable from '../DB/versionsTable.js'
-import getCalculationPeriod from '../modules/createIssues/utils/getCalculationPeriod.js'
 import {
 	_account,
-	_issueInvoiceDateParamCode,
 	_parentCancelStartStatus,
 	_parentCreateStartStatus,
-	_parentIssueCompanyId,
-	_parentIssueTitle,
-	_parentType,
 } from '../settings/setSettings.js'
 
 const _versionsTableDB = new versionsTable()
@@ -51,6 +44,7 @@ routers.get('/version/link/:id', async (req, res) => {
 // Создание версии
 routers.post('/versions', async (req, res) => {
 	let invoiceDate = req.body.date
+	let parentIssueCompanyId = req.body.parentIssueCompanyId
 	invoiceDate = invoiceDate.split('.').reverse().join('-')
 	let curMonthName = await getCalculationPeriod(invoiceDate)
 	let issueName = _parentIssueTitle + ' ' + curMonthName
@@ -58,7 +52,7 @@ routers.post('/versions', async (req, res) => {
 	let params = {}
 	params[_issueInvoiceDateParamCode] = invoiceDate
 
-	let issueId = await addIssueAPI(_parentIssueCompanyId, _parentType, issueName)
+	let issueId = await addIssueAPI(parentIssueCompanyId, _parentType, issueName)
 	await changeIssueParamsAPI(issueId, params)
 	await changeStatusAPI(issueId, _parentCreateStartStatus)
 	res.send({ issueId: 'Создана' })

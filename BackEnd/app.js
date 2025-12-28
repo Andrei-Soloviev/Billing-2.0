@@ -9,7 +9,7 @@ import {
 	_parentCancelStartStatus,
 	_parentCreateEndStatus,
 	_parentCreateStartStatus,
-	_parentIssueCompanyId,
+	_parentIssueCompanyIds,
 	_parentType,
 } from './settings/setSettings.js'
 
@@ -91,7 +91,11 @@ app.post('/', isIssueMiddleware, async (req, res) => {
 
 	if (curType == _parentType && curStatus == _parentCreateStartStatus) {
 		// Проверка "Выбрана ли правильная компания"
-		if (curClientId == _parentIssueCompanyId) {
+		console.log(_parentIssueCompanyIds)
+		console.log(_parentIssueCompanyIds.split(','))
+		console.log(_parentIssueCompanyIds.split(',').includes(String(curClientId)))
+		console.log(_parentIssueCompanyIds.split(',').includes(curClientId))
+		if (_parentIssueCompanyIds.split(',').includes(String(curClientId))) {
 			await addCommentToIssueAPI(issueId, _commentCreateStartText)
 			// Получение текущего состояния из Okdesk
 			await getTariffs()

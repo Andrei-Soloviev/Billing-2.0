@@ -69,7 +69,7 @@
 
 	"parentIssue": {
 		"title": "Автоматическая подготовка счетов за",
-		"companyId": "14",
+		"companyIds": "14,16",
 		"type": ""
 	}
 }

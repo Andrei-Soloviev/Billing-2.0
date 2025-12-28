@@ -71,4 +71,4 @@ export const _companyBankCode = settings.companyParametersCodes.bank
 export const _companyDirectorCode = settings.companyParametersCodes.director
 
 export const _parentIssueTitle = settings.parentIssue.title
-export const _parentIssueCompanyId = settings.parentIssue.companyId
+export const _parentIssueCompanyIds = settings.parentIssue.companyIds
